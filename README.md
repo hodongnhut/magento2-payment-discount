@@ -11,4 +11,6 @@ https://github.com/devromans/payment-fee
 
 -We can follow this guide to add a specific fee to order total: http://magento.stackexchange.com/questions/92774/how-to-add-fee-to-order-totals-in-magento2
 
+-Replace a default JS component: http://devdocs.magento.com/guides/v2.0/javascript-dev-guide/javascript/custom_js.html 
+
 <h1>Comming soon.</h1>
