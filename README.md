@@ -6,6 +6,8 @@ The same license with Magento application: https://opensource.org/licenses/OSL-3
 Re-construct module to follow the logic of this extension:
 https://github.com/devromans/payment-fee
 
+<h5>Welcome any feedback and contributor.</h5>
+
 <h2>Technical Guide</h2>
 -We can create an offline payment method here: http://cedcommerce.com/magento-2-module-creator/payment-module
 
