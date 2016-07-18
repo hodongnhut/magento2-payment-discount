@@ -3,8 +3,9 @@ Add a payment with a specific fee in Magento 2
 
 The same license with Magento application: https://opensource.org/licenses/OSL-3.0
 
-Re-construct module to follow the logic of this extension:
-https://github.com/devromans/payment-fee
+Re-construct module to follow the logic of this extension: https://github.com/devromans/payment-fee
+
+Thanks to <a href="https://github.com/devromans">@devromans</a>
 
 <h5>Welcome any feedback and contributor.</h5>
 
