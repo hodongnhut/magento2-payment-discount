@@ -1,7 +1,9 @@
 # Boolfly Payment Fee
 Add a payment with a specific fee in Magento 2
 
-Re-construct module follows the logic of this extension:
+The same license with Magento application: https://opensource.org/licenses/OSL-3.0
+
+Re-construct module to follows the logic of this extension:
 https://github.com/devromans/payment-fee
 
 <h2>Technical Guide</h2>
