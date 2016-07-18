@@ -1,5 +1,5 @@
 # Boolfly Payment Fee
-Add a payment with a specific fee in Magento 2
+Add a specific fee to the payment in Magento 2
 
 The same license with Magento application: https://opensource.org/licenses/OSL-3.0
 
