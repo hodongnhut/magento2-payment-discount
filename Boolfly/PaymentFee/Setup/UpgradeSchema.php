@@ -69,7 +69,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $setup->getConnection()
             ->addColumn(
                 $setup->getTable($orderTable),
-                'fee_amount',
+                'base_fee_amount',
                 [
                     'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
                     '10,2',
