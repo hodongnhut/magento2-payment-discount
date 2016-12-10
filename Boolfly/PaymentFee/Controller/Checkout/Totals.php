@@ -56,12 +56,7 @@ class Totals extends \Magento\Framework\App\Action\Action
         try {
             //Trigger to re-calculate totals
             $payment = $this->_helper->jsonDecode($this->getRequest()->getContent());
-            $this->_checkoutSession->getQuote()->getPayment()->setMethod('');
-            if($payment['payment'] == \Boolfly\PaymentFee\Model\PaymentFee::PAYMENT_METHOD_FEE_CODE) {
-
-                $this->_checkoutSession->getQuote()->getPayment()
-                    ->setMethod(\Boolfly\PaymentFee\Model\PaymentFee::PAYMENT_METHOD_FEE_CODE);
-            }
+            $this->_checkoutSession->getQuote()->getPayment()->setMethod($payment['payment']);
             $this->_checkoutSession->getQuote()->collectTotals()->save();
 
         } catch (\Exception $e) {

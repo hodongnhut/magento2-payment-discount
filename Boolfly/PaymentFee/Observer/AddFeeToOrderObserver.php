@@ -32,15 +32,15 @@ class AddFeeToOrderObserver implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $quote = $observer->getQuote();
-        $paymentFee = $quote->getPaymentCharge();
-        $paymentBaseFee = $quote->getBasePaymentCharge();
-        if(!$paymentFee || !$paymentBaseFee) {
+        $feeAmount = $quote->getFeeAmount();
+        $baseFeeAmount = $quote->getBaseFeeAmount();
+        if(!$feeAmount || !$baseFeeAmount) {
             return $this;
         }
         //Set fee data to order
         $order = $observer->getOrder();
-        $order->setData('fee_amount', $paymentFee);
-        $order->setData('base_fee_amount', $paymentBaseFee);
+        $order->setData('fee_amount', $feeAmount);
+        $order->setData('base_fee_amount', $baseFeeAmount);
 
         return $this;
     }
