@@ -22,23 +22,16 @@ class Totals extends \Magento\Framework\App\Action\Action
      */
     protected $_helper;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $_logger;
-
     public function __construct(
         Context $context,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Json\Helper\Data $helper,
-        \Boolfly\PaymentFee\Logger\Logger $logger,
         \Magento\Framework\Controller\Result\JsonFactory $resultJson
     )
     {
         parent::__construct($context);
         $this->_checkoutSession = $checkoutSession;
         $this->_helper = $helper;
-        $this->_logger = $logger;
         $this->_resultJson = $resultJson;
     }
 
@@ -68,9 +61,6 @@ class Totals extends \Magento\Framework\App\Action\Action
 
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultJson = $this->_resultJson->create();
-        $this->_logger->info(
-            $this->_checkoutSession->getQuote()->getId() . $response["message"]
-        );
         return $resultJson->setData($response);
     }
 }
