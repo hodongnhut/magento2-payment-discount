@@ -16,4 +16,8 @@ Thanks to <a href="https://github.com/devromans">@devromans</a>
 
 -Replace a default JS component: http://devdocs.magento.com/guides/v2.0/javascript-dev-guide/javascript/custom_js.html 
 
+Admin Config: **STORES > Configuration > SALES > Payment Fee**
+
+https://github.com/mrkhoa99/Boolfly_payment_fee/blob/master/screenshots/Payment%20admin%20config.png
+
 <h1>Comming soon.</h1>
