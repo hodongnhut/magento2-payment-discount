@@ -18,6 +18,6 @@ Thanks to <a href="https://github.com/devromans">@devromans</a>
 
 Admin Config: **STORES > Configuration > SALES > Payment Fee**
 
-https://github.com/mrkhoa99/Boolfly_payment_fee/blob/master/screenshots/Payment%20admin%20config.png
+<img src="https://github.com/mrkhoa99/Boolfly_payment_fee/blob/master/screenshots/Payment%20admin%20config.png" alt="Boolfly Payment admin config"/>
 
 <h1>Comming soon.</h1>
