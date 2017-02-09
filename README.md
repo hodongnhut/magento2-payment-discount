@@ -25,3 +25,5 @@ Thanks to <a href="https://github.com/devromans">@devromans</a>
 <h3>Checkout Page:</h3>
 
 <img src="https://github.com/mrkhoa99/Boolfly_payment_fee/blob/master/screenshots/One%20Page%20Checkout.png" alt="Boofly Payment fee on checkout Page"/>
+
+**Tested: Magento 2.1.2**
