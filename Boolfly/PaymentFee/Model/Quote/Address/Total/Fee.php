@@ -65,17 +65,15 @@ class Fee extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
             return $this;
         }
 
-        if($this->_helperData->canApply($total)) {
-            $exist_amount = $quote->getFeeAmount();
-            $fee          = $this->_helperData->getFee($total);
-            $balance      = $fee - $exist_amount;
-            $total->setFeeAmount($balance);
-            $total->setBaseFeeAmount($balance);
-            $total->setFeeAmount($balance);
+        if($this->_helperData->canApply($quote)) {
+            $fee          = $this->_helperData->getFee($quote);
+            $total->setFeeAmount($fee);
+            $total->setBaseFeeAmount($fee);
+            $total->setTotalAmount('fee_amount', $fee);
+            $total->setBaseTotalAmount('base_fee_amount', $fee);
             $total->setGrandTotal($total->getGrandTotal() + $total->getFeeAmount());
             $total->setBaseGrandTotal($total->getBaseGrandTotal() + $total->getBaseFeeAmount());
         }
-
         return $this;
     }
 

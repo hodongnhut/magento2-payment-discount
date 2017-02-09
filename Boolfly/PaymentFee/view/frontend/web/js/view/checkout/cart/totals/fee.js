@@ -1,6 +1,6 @@
 define(
     [
-        'Boolfly_PaymentFee/js/view/checkout/summary/charge'
+        'Boolfly_PaymentFee/js/view/checkout/summary/fee'
     ],
     function (Component) {
         'use strict';

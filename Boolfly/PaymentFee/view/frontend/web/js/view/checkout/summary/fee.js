@@ -10,7 +10,7 @@ define(
         return Component.extend({
             defaults: {
                 isFullTaxSummaryDisplayed: window.checkoutConfig.isFullTaxSummaryDisplayed || false,
-                template: 'Boolfly_PaymentFee/checkout/summary/charge'
+                template: 'Boolfly_PaymentFee/checkout/summary/fee'
             },
             totals: quote.getTotals(),
             isTaxDisplayedInGrandTotal: window.checkoutConfig.includeTaxInGrandTotal || false,
@@ -20,7 +20,7 @@ define(
             getValue: function() {
                 var price = 0;
                 if (this.totals()) {
-                    price = totals.getSegment('payment_charge').value;
+                    price = totals.getSegment('fee_amount').value;
                 }
                 return this.getFormattedPrice(price);
             },

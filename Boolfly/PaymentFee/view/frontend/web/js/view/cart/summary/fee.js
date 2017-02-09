@@ -19,12 +19,12 @@ define(
                 if (!this.totals()) {
                     return null;
                 }
-                return totals.getSegment('payment_charge').value;
+                return totals.getSegment('fee_amount').value;
             },
             getPureValue: function() {
                 var price = 0;
-                if (this.totals() && totals.getSegment('payment_charge').value) {
-                    price = parseFloat(totals.getSegment('payment_charge').value);
+                if (this.totals() && totals.getSegment('fee_amount').value) {
+                    price = parseFloat(totals.getSegment('fee_amount').value);
                 }
                 return price;
             },

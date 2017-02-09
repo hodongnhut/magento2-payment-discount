@@ -10,7 +10,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Recipient fixed amount of custom payment config path
      */
-    const CONFIG_PAYMENT_FEE = 'payment/paymentfee/amount';
+    const CONFIG_PAYMENT_FEE = 'paymentfee/config/';
     /**
      * Total Code
      */
@@ -27,6 +27,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     )
     {
         parent::__construct($context);
+        $this->_getMethodFee();
     }
 
     /**
@@ -34,22 +35,47 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @return array
      */
     protected function _getMethodFee() {
+
     if (is_null($this->methodFee)) {
-        $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
-        $this->methodFee = $this->scopeConfig->getValue(self::CONFIG_PAYMENT_FEE, $storeScope);
+        $fees = unserialize($this->getConfig('fee'));
+        foreach ($fees as $fee) {
+            $this->methodFee[$fee['payment_method']] = array(
+                'fee'         => $fee['fee'],
+                'description' => $fee['description']
+            );
+        }
     }
     return $this->methodFee;
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote\Address\Total $address
+     * Retrieve Store Config
+     * @param string $field
+     * @return mixed|null
+     */
+    public function getConfig($field = '') {
+        if ($field) {
+            $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
+            return $this->scopeConfig->getValue(self::CONFIG_PAYMENT_FEE . $field, $storeScope);
+        }
+        return NULL;
+    }
+
+    /**
+     * Check if Extension is Enabled config
      * @return bool
      */
-    public function canApply(\Magento\Quote\Model\Quote\Address\Total $address) {
+    public function isEnabled() {
+        return $this->getConfig('enabled');
+    }
+    /**
+     * @param \Magento\Quote\Model\Quote $quote
+     * @return bool
+     */
+    public function canApply(\Magento\Quote\Model\Quote $quote) {
 
-        $quote = $address->getQuote();
         /**@TODO check module or config**/
-        if ($this->isModuleOutputEnabled()) {
+        if ($this->isEnabled()) {
             if ($method = $quote->getPayment()->getMethod()) {
                 if (isset($this->methodFee[$method])) {
                     return true;
@@ -60,12 +86,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote\Address\Total $address
+     * @param \Magento\Quote\Model\Quote $quote
      * @return float|int
      */
-    public function getFee(\Magento\Quote\Model\Quote\Address\Total $address) {
-        /* @var $quote \Magento\Quote\Model\Quote */
-        $quote   = $address->getQuote();
+    public function getFee(\Magento\Quote\Model\Quote $quote) {
+       ;
         $method  = $quote->getPayment()->getMethod();
         $fee     = $this->methodFee[$method]['fee'];
         $feeType = $this->getFeeType();
@@ -84,11 +109,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @TODO retrieve config
+     * Retrieve Fee type from Store config (Percent or Fixed)
      * @return string
      */
     public function getFeeType()
     {
-        return 'F';
+        return $this->getConfig('fee_type');
     }
 }
