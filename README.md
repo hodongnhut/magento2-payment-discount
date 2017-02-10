@@ -21,6 +21,9 @@ Thanks to <a href="https://github.com/devromans">@devromans</a>
 
 <img src="https://github.com/mrkhoa99/Boolfly_payment_fee/blob/master/screenshots/Payment%20admin%20config.png" alt="Boolfly Payment admin config"/>
 
+<h3>Creating order Admin</h3>
+
+<img src="https://github.com/mrkhoa99/Boolfly_payment_fee/blob/master/screenshots/Create%20order%20admin.png" alt="Boolfly Payment fee for creating order admin"/>
 
 <h3>Checkout Page:</h3>
 
