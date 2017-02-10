@@ -36,16 +36,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function _getMethodFee() {
 
-    if (is_null($this->methodFee)) {
-        $fees = unserialize($this->getConfig('fee'));
-        foreach ($fees as $fee) {
-            $this->methodFee[$fee['payment_method']] = array(
-                'fee'         => $fee['fee'],
-                'description' => $fee['description']
-            );
+        if (is_null($this->methodFee)) {
+            $fees = unserialize($this->getConfig('fee'));
+            if(is_array($fees)) {
+                foreach ($fees as $fee) {
+                    $this->methodFee[$fee['payment_method']] = array(
+                        'fee'         => $fee['fee'],
+                        'description' => $fee['description']
+                    );
+                }
+            }
+
         }
-    }
-    return $this->methodFee;
+        return $this->methodFee;
     }
 
     /**
