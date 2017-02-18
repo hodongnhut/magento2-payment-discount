@@ -1,6 +1,6 @@
 <?php
 
-namespace Boolfly\PaymentFee\Block\Adminhtml\Sales;
+namespace Boolfly\PaymentFee\Block\Adminhtml\Sales\Order;
 
 class Totals extends \Magento\Framework\View\Element\Template
 {
