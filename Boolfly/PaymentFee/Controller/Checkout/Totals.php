@@ -22,17 +22,24 @@ class Totals extends \Magento\Framework\App\Action\Action
      */
     protected $_helper;
 
+    /**
+     * @var \Magento\Quote\Api\CartRepositoryInterface
+     */
+    protected $quoteRepository;
+
     public function __construct(
         Context $context,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Json\Helper\Data $helper,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJson
+        \Magento\Framework\Controller\Result\JsonFactory $resultJson,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
     )
     {
         parent::__construct($context);
         $this->_checkoutSession = $checkoutSession;
         $this->_helper = $helper;
         $this->_resultJson = $resultJson;
+        $this->quoteRepository = $quoteRepository;
     }
 
     /**
@@ -47,10 +54,14 @@ class Totals extends \Magento\Framework\App\Action\Action
             'message' => 'Re-calculate successful.'
         ];
         try {
+            $this->quoteRepository->get($this->_checkoutSession->getQuoteId());
+            $quote = $this->_checkoutSession->getQuote();
             //Trigger to re-calculate totals
             $payment = $this->_helper->jsonDecode($this->getRequest()->getContent());
             $this->_checkoutSession->getQuote()->getPayment()->setMethod($payment['payment']);
-            $this->_checkoutSession->getQuote()->collectTotals()->save();
+            $this->quoteRepository->save($quote->collectTotals());
+            //@deprecated save collect totals function
+            //$this->_checkoutSession->getQuote()->collectTotals()->save();
 
         } catch (\Exception $e) {
             $response = [
