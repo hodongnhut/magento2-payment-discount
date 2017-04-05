@@ -17,27 +17,19 @@ class Methods extends \Magento\Framework\View\Element\Html\Select
     protected $paymentConfig;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
      * Methods constructor.
      * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Payment\Model\Config $config
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
         \Magento\Payment\Model\Config $config,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         array $data = []
     )
     {
         parent::__construct($context, $data);
         $this->paymentConfig = $config;
-        $this->scopeConfig = $scopeConfig;
 
     }
 
@@ -83,7 +75,7 @@ class Methods extends \Magento\Framework\View\Element\Html\Select
     {
         if (!$this->getOptions()) {
             foreach ($this->_getPaymentMethods() as $paymentCode => $paymentModel) {
-                $paymentTitle = $this->scopeConfig->getValue('payment/'.$paymentCode.'/title');
+                $paymentTitle = $this->_scopeConfig->getValue('payment/'.$paymentCode.'/title');
                 $this->addOption($paymentCode, addslashes($paymentTitle));
             }
         }
