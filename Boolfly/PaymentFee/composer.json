@@ -1,0 +1,23 @@
+{
+    "name": "boolfly/payment-fee",
+    "description": "N/A",
+    "authors": [
+      {
+        "name": "Khoa",
+        "email": "mrkhoa99@gmail.com"
+      }
+    ],
+    "require": {
+        "php": "~5.6.5|7.0.2|7.0.4|~7.0.6"
+    },
+    "type": "magento2-module",
+    "version": "1.0.0",
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Boolfly\\PaymentFee\\": ""
+        }
+    }
+}
