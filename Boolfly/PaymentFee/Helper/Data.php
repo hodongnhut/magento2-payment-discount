@@ -14,7 +14,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Total Code
      */
-    const TOTAL_CODE = 'fee';
+    const TOTAL_CODE = 'fee_amount';
     /**
      * @var array
      */
