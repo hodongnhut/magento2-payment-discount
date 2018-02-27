@@ -19,169 +19,38 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         $setup->startSetup();
 
-        $quoteAddressTable = 'quote_address';
-        $quoteTable = 'quote';
-        $orderTable = 'sales_order';
-        $invoiceTable = 'sales_invoice';
-        $creditmemoTable = 'sales_creditmemo';
+        // Add fee and baseFee
+        foreach(['quote', 'quote_address', 'sales_order', 'sales_invoice', 'sales_creditmemo'] as $table){
+            $this->addColumn($setup, $table, 'fee_amount', 'Fee Amount');
+            $this->addColumn($setup, $table, 'base_fee_amount', 'Base Fee Amount');
+        }
 
-        //Setup two columns for quote, quote_address and order
-        //Quote address tables
-        $setup->getConnection()
-            ->addColumn(
-                $setup->getTable($quoteAddressTable),
-                'fee_amount',
-                [
-                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                    '10,2',
-                    'default' => 0.00,
-                    'nullable' => true,
-                    'comment' =>'Fee Amount'
-                ]
-            );
-        $setup->getConnection()
-            ->addColumn(
-                $setup->getTable($quoteAddressTable),
-                'base_fee_amount',
-                [
-                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                    '10,2',
-                    'default' => 0.00,
-                    'nullable' => true,
-                    'comment' =>'Base Fee Amount'
-                ]
-            );
-        //Order tables
-        $setup->getConnection()
-            ->addColumn(
-                $setup->getTable($orderTable),
-                'fee_amount',
-                [
-                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                    '10,2',
-                    'default' => 0.00,
-                    'nullable' => true,
-                    'comment' =>'Fee Amount'
+        // Add feeInvoiced, baseFeeInvoiced, feeRefunded, baseFeeRefunded
+        $this->addColumn($setup, 'sales_order', 'fee_amount_invoiced', 'Fee Amount Invoiced');
+        $this->addColumn($setup, 'sales_order', 'base_fee_amount_invoiced', 'Base Fee Amount Invoiced');
+        $this->addColumn($setup, 'sales_order', 'fee_amount_refunded', 'Fee Amount Refunded');
+        $this->addColumn($setup, 'sales_order', 'base_fee_amount_refunded', 'Base Fee Amount Refunded');
 
-                ]
-            );
-
-        $setup->getConnection()
-            ->addColumn(
-                $setup->getTable($orderTable),
-                'base_fee_amount',
-                [
-                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                    '10,2',
-                    'default' => 0.00,
-                    'nullable' => true,
-                    'comment' =>'Base Fee Amount'
-
-                ]
-            );
-
-        $setup->getConnection()
-            ->addColumn(
-                $setup->getTable($orderTable),
-                'fee_amount_refunded',
-                [
-                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                    '10,2',
-                    'default' => 0.00,
-                    'nullable' => true,
-                    'comment' =>'Base Fee Amount Refunded'
-                ]
-            );
-        $setup->getConnection()
-            ->addColumn(
-                $setup->getTable($orderTable),
-                'base_fee_amount_refunded',
-                [
-                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                    '10,2',
-                    'default' => 0.00,
-                    'nullable' => true,
-                    'comment' =>'Base Fee Amount Refunded'
-                ]
-            );
-        $setup->getConnection()
-            ->addColumn(
-                $setup->getTable($orderTable),
-                'fee_amount_invoiced',
-                [
-                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                    '10,2',
-                    'default' => 0.00,
-                    'nullable' => true,
-                    'comment' =>'Fee Amount Invoiced'
-                ]
-            );
-        $setup->getConnection()
-            ->addColumn(
-                $setup->getTable($orderTable),
-                'base_fee_amount_invoiced',
-                [
-                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                    '10,2',
-                    'default' => 0.00,
-                    'nullable' => true,
-                    'comment' =>'Base Fee Amount Invoiced'
-                ]
-            );
-        //Invoice tables
-        $setup->getConnection()
-            ->addColumn(
-                $setup->getTable($invoiceTable),
-                'fee_amount',
-                [
-                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                    '10,2',
-                    'default' => 0.00,
-                    'nullable' => true,
-                    'comment' =>'Fee Amount'
-
-                ]
-            );
-        $setup->getConnection()
-            ->addColumn(
-                $setup->getTable($invoiceTable),
-                'base_fee_amount',
-                [
-                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                    '10,2',
-                    'default' => 0.00,
-                    'nullable' => true,
-                    'comment' =>'Base Fee Amount'
-
-                ]
-            );
-        //Credit memo tables
-        $setup->getConnection()
-            ->addColumn(
-                $setup->getTable($creditmemoTable),
-                'fee_amount',
-                [
-                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                    '10,2',
-                    'default' => 0.00,
-                    'nullable' => true,
-                    'comment' =>'Fee Amount'
-
-                ]
-            );
-        $setup->getConnection()
-            ->addColumn(
-                $setup->getTable($creditmemoTable),
-                'base_fee_amount',
-                [
-                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                    '10,2',
-                    'default' => 0.00,
-                    'nullable' => true,
-                    'comment' =>'Base Fee Amount'
-
-                ]
-            );
         $setup->endSetup();
+    }
+
+    /**
+     * @param \Magento\Framework\Setup\SchemaSetupInterface $setup
+     * @param string $table
+     * @param string $name
+     * @param string $description
+     */
+    public function addColumn(SchemaSetupInterface $setup, $table, $name, $description){
+        $setup->getConnection()->addColumn(
+            $setup->getTable($table),
+            $name,
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                'length' => '12,4',
+                'default' => 0.0000,
+                'nullable' => true,
+                'comment' => $description
+            ]
+        );
     }
 }
