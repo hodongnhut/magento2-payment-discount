@@ -13,24 +13,27 @@ class Fee extends AbstractTotal
     public function collect(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {
         $order = $creditmemo->getOrder();
-        if ($order->getFeeAmountInvoiced() > 0) {
-            $feeAmountLeft     = $order->getFeeAmountInvoiced() - $order->getFeeAmountRefunded();
-            $basefeeAmountLeft = $order->getBaseFeeAmountInvoiced() - $order->getBaseFeeAmountRefunded();
-            if ($basefeeAmountLeft > 0) {
-                $creditmemo->setGrandTotal($creditmemo->getGrandTotal() + $feeAmountLeft);
-                $creditmemo->setBaseGrandTotal($creditmemo->getBaseGrandTotal() + $basefeeAmountLeft);
-                $creditmemo->setFeeAmount($feeAmountLeft);
-                $creditmemo->setBaseFeeAmount($basefeeAmountLeft);
-            }
-        } else {
-            $feeAmount     = $order->getFeeAmountInvoiced();
-            $basefeeAmount = $order->getBaseFeeAmountInvoiced();
-            $creditmemo->setGrandTotal($creditmemo->getGrandTotal() + $feeAmount);
-            $creditmemo->setBaseGrandTotal($creditmemo->getBaseGrandTotal() + $basefeeAmount);
-            $creditmemo->setFeeAmount($feeAmount);
-            $creditmemo->setBaseFeeAmount($basefeeAmount);
+
+        $feeAmountInvoiced = $order->getFeeAmountInvoiced();
+        $baseFeeAmountInvoiced = $order->getBaseFeeAmountInvoiced();
+
+        // Nothing to refound
+        if((int)$feeAmountInvoiced === 0){
+            return $this;
         }
-        return $this;
+
+        // Check if refound has already been done
+        $feeAmountRefunded = $order->getFeeAmountRefunded();
+        if((int)$feeAmountRefunded === 0){
+            $creditmemo->setGrandTotal($creditmemo->getGrandTotal() + $feeAmountInvoiced);
+            $creditmemo->setBaseGrandTotal($creditmemo->getBaseGrandTotal() + $baseFeeAmountInvoiced);
+            $creditmemo->setFeeAmount($feeAmountInvoiced);
+            $creditmemo->setBaseFeeAmount($baseFeeAmountInvoiced);
+
+            // Set fee amount refunded into order
+            $order->setFeeAmountRefunded($feeAmountInvoiced);
+            $order->setBaseFeeAmountRefunded($baseFeeAmountInvoiced);
+        }
 
         return $this;
     }

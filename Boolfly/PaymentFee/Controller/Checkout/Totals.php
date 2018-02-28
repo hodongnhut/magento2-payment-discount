@@ -59,9 +59,9 @@ class Totals extends \Magento\Framework\App\Action\Action
             //Trigger to re-calculate totals
             $payment = $this->_helper->jsonDecode($this->getRequest()->getContent());
             $this->_checkoutSession->getQuote()->getPayment()->setMethod($payment['payment']);
-            $this->quoteRepository->save($quote->collectTotals());
-            //@deprecated save collect totals function
-            //$this->_checkoutSession->getQuote()->collectTotals()->save();
+            $quote->collectTotals();
+            $this->quoteRepository->save($quote);
+
 
         } catch (\Exception $e) {
             $response = [
