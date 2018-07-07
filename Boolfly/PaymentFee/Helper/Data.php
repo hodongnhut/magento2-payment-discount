@@ -4,6 +4,8 @@ namespace Boolfly\PaymentFee\Helper;
 
 
 
+use Magento\Framework\Serialize\SerializerInterface;
+
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
 
@@ -22,11 +24,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Constructor
      */
+
+    /**
+     * @var SerializerInterface
+     */
+    protected $serializer;
+
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context
+        \Magento\Framework\App\Helper\Context $context,
+        SerializerInterface $serializer
     )
     {
         parent::__construct($context);
+        $this->serializer = $serializer;
         $this->_getMethodFee();
     }
 
@@ -38,7 +48,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         if (is_null($this->methodFee)) {
             $initialFees = $this->getConfig('fee');
-            $fees = is_array($initialFees) ? $initialFees : unserialize($initialFees);
+            $fees = is_array($initialFees) ? $initialFees : $this->serializer->unserialize($initialFees);
+
             if(is_array($fees)) {
                 foreach ($fees as $fee) {
                     $this->methodFee[$fee['payment_method']] = array(
