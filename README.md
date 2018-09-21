@@ -15,6 +15,12 @@ Thanks to <a href="https://github.com/devromans">@devromans</a>
 
 `composer require --prefer-source 'boolfly/payment-fee:*'`
 
+`php bin/magento setup:upgrade`
+
+`php bin/magento setup:di:compile`
+
+`php bin/magento cache:flush`
+
 <h2>Technical Guide</h2>
 -We can create an offline payment method here: http://cedcommerce.com/magento-2-module-creator/payment-module
 
