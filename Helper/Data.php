@@ -28,10 +28,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $serializer;
     /**
-     * @var Cart
-     */
-    protected $cart;
-    /**
      * @var LoggerInterface
      */
     protected $logger;
@@ -39,7 +35,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         SerializerInterface $serializer,
-        \Magento\Checkout\Model\Cart $cart,
         \Psr\Log\LoggerInterface $loggerInterface
     )
     {
@@ -122,7 +117,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         if ($feeType == \Magento\Shipping\Model\Carrier\AbstractCarrier::HANDLING_TYPE_FIXED) {
             return $fee;
         } else {
-            $subTotal = $this->cart->getQuote()->getSubtotal();
+            $subTotal = $quote->getSubtotal();
             return ($subTotal * ($fee / 100));
         }
     }
