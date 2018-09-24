@@ -124,7 +124,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $sum    = 0;
             foreach ($totals as $total) {
                 $this->logger->debug(__METHOD__ . ':' . __LINE__ . ' total code => ' . $total->getCode());
-                if ($total->getCode() != self::TOTAL_CODE) {
+                // if ($total->getCode() != self::TOTAL_CODE) {
+                if ($total->getCode() == 'subtotal') {
                     $this->logger->debug(__METHOD__ . ':' . __LINE__ . ' total value => ' . (float)$total->getValue());
                     $sum += (float)$total->getValue();
                     $this->logger->debug(__METHOD__ . ':' . __LINE__ . ' current sum => ' . $sum);
