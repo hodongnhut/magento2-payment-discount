@@ -41,7 +41,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         parent::__construct($context);
         $this->serializer = $serializer;
         $this->_getMethodFee();
-        $this->cart = $cart;
         $this->logger = $loggerInterface;
     }
 
