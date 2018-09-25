@@ -9,6 +9,18 @@ Thanks to <a href="https://github.com/devromans">@devromans</a>
 
 <h5>Welcome any feedback and contributor.</h5>
 
+<h2>Install with Composer</h2>
+
+`composer config repositories.mrkhoa99boolfly_payment_fee vcs https://github.com/mrkhoa99/Boolfly_payment_fee.git`
+
+`composer require --prefer-source 'boolfly/payment-fee:*'`
+
+`php bin/magento setup:upgrade`
+
+`php bin/magento setup:di:compile`
+
+`php bin/magento cache:flush`
+
 <h2>Technical Guide</h2>
 -We can create an offline payment method here: http://cedcommerce.com/magento-2-module-creator/payment-module
 

@@ -105,7 +105,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @return float|int
      */
     public function getFee(\Magento\Quote\Model\Quote $quote) {
-       ;
         $method  = $quote->getPayment()->getMethod();
         $fee     = $this->methodFee[$method]['fee'];
         $feeType = $this->getFeeType();
