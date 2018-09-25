@@ -2,8 +2,6 @@
 
 namespace Boolfly\PaymentFee\Helper;
 
-
-
 use Magento\Framework\Serialize\SerializerInterface;
 
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
@@ -29,15 +27,21 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @var SerializerInterface
      */
     protected $serializer;
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
 
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
+        \Psr\Log\LoggerInterface $loggerInterface
     )
     {
         parent::__construct($context);
         $this->serializer = $serializer;
         $this->_getMethodFee();
+        $this->logger = $loggerInterface;
     }
 
     /**
@@ -108,17 +112,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $method  = $quote->getPayment()->getMethod();
         $fee     = $this->methodFee[$method]['fee'];
         $feeType = $this->getFeeType();
+
         if ($feeType == \Magento\Shipping\Model\Carrier\AbstractCarrier::HANDLING_TYPE_FIXED) {
             return $fee;
         } else {
-            $totals = $quote->getTotals();
-            $sum    = 0;
-            foreach ($totals as $total) {
-                if ($total->getCode() != self::TOTAL_CODE) {
-                    $sum += (float)$total->getValue();
-                }
-            }
-            return ($sum * ($fee / 100));
+            $subTotal = $quote->getSubtotal();
+            return ($subTotal * ($fee / 100));
         }
     }
 
