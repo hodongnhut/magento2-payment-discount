@@ -2,8 +2,6 @@
 
 namespace Boolfly\PaymentFee\Helper;
 
-
-
 use Magento\Framework\Serialize\SerializerInterface;
 
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
