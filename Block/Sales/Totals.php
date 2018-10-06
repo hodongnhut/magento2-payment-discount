@@ -52,22 +52,25 @@ class Totals extends \Magento\Framework\View\Element\Template
      */
     public function initTotals()
     {
+        
         $parent = $this->getParentBlock();
         $this->_order = $parent->getOrder();
         $this->_source = $parent->getSource();
         if(!$this->_source->getFeeAmount()) {
             return $this;
         }
+
         $fee = new \Magento\Framework\DataObject(
             [
                 'code' => 'fee',
                 'strong' => false,
                 'value' => $this->_source->getFeeAmount(),
-                'label' => __('Surcharge Fee'),
+                'label' => __('Payment Fee'),
             ]
         );
 
         $parent->addTotal($fee, 'fee');
+
         return $this;
     }
 }

@@ -21,6 +21,10 @@ class Totals extends \Magento\Framework\App\Action\Action
      * @var \Magento\Framework\Json\Helper\Data
      */
     protected $_helper;
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
 
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
@@ -32,7 +36,8 @@ class Totals extends \Magento\Framework\App\Action\Action
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Json\Helper\Data $helper,
         \Magento\Framework\Controller\Result\JsonFactory $resultJson,
-        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
+        \Psr\Log\LoggerInterface $loggerInterface
     )
     {
         parent::__construct($context);
@@ -40,6 +45,7 @@ class Totals extends \Magento\Framework\App\Action\Action
         $this->_helper = $helper;
         $this->_resultJson = $resultJson;
         $this->quoteRepository = $quoteRepository;
+        $this->logger = $loggerInterface;
     }
 
     /**
@@ -56,6 +62,7 @@ class Totals extends \Magento\Framework\App\Action\Action
         try {
             $this->quoteRepository->get($this->_checkoutSession->getQuoteId());
             $quote = $this->_checkoutSession->getQuote();
+
             //Trigger to re-calculate totals
             $payment = $this->_helper->jsonDecode($this->getRequest()->getContent());
             $this->_checkoutSession->getQuote()->getPayment()->setMethod($payment['payment']);

@@ -8,4 +8,7 @@
     <type name="Magento\Paypal\Model\Cart">
         <plugin name="update_paypal_fee_order" type="Boolfly\PaymentFee\Plugin\UpdateFeeForOrder"/>
     </type>
+    <type name="Magento\Paypal\Model\Api\Nvp">
+        <plugin name="log_paypal_nvp_request" type="Boolfly\PaymentFee\Plugin\LogPayPalNVPRequest"/>
+    </type>
 </config>

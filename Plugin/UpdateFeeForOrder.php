@@ -4,6 +4,7 @@ namespace Boolfly\PaymentFee\Plugin;
 
 class UpdateFeeForOrder
 {
+
     /**
      * @var \Magento\Quote\Model\QuoteFactory
      */
@@ -25,57 +26,49 @@ class UpdateFeeForOrder
     }
 
     /**
-     * Get shipping, tax, subtotal and discount amounts all together
+     * Add Fee as a custom line item
      *
      * @return array
      */
-    public function beforeGetAllItems($cart)
+    public function beforeGetAllItems(\Magento\Paypal\Model\Cart $cart)
     {
-        return;
-
-        $paypalTest = $this->_registry->registry('is_paypal_items')? $this->_registry->registry('is_paypal_items') : 0;
         $quote = $this->_checkoutSession->getQuote();
         $paymentMethod = $quote->getPayment()->getMethod();
-
-        $this->logger->debug(__METHOD__ . ' paymentMethod: ' .$paymentMethod);
-        $this->logger->debug(__METHOD__ . ' paypalTest: ' .$paypalTest);
         
         $paypalMehodList = ['payflowpro','payflow_link','payflow_advanced','braintree_paypal','paypal_express_bml','payflow_express_bml','payflow_express','paypal_express'];
-        if($paypalTest < 3 && in_array($paymentMethod,$paypalMehodList)){
+        if(!in_array($paymentMethod,$paypalMehodList)) return;
+        
+        $feeAmount = $quote->getFeeAmount();
+        $cart->addCustomItem(__("Payment Fee"), 1 , $feeAmount, 'payment_method_fee');
+        $cart->addSubtotal($feeAmount);
+    }
+
+    /**
+     * Get shipping, tax, subtotal and discount amounts all together
+     * No way to tell if we already added a fee line item in beforeGetAllItems :'(
+     * We will filter out any extras
+     *
+     * @return array
+     */
+    public function afterGetAllItems(\Magento\Paypal\Model\Cart $cart, $result)
+    {
+
+        if (empty($result)) return $result;
+
+        $found = false;
+        foreach ($result as $key => $item) {
             
-            $this->logger->debug(__METHOD__ . ' correct payment theod');
-            
-            if(method_exists($cart , 'addCustomItem' )) {
-                
-                $this->logger->debug(__METHOD__ . ' addCustomItem exists');
-                
-                $feeAmount = $quote->getFeeAmount();
-                $cart->addCustomItem(__("Payment Fee"), 1 , $feeAmount);
+            if ($item->getId() != 'payment_method_fee') continue;
 
-                $this->logger->debug(__METHOD__ . ' fee ' . $feeAmount);
-
-                $reg = $this->_registry->registry('is_paypal_items');
-                $current = $reg + 1 ;
-
-                $items = $quote->getAllItems();
-
-                foreach($items as $item) {
-                    $this->logger->debug(
-                        __METHOD__ . ' ID: '.$item->getProductId()."\n".
-                        'Name: '.$item->getName()."\n".
-                        'Sku: '.$item->getSku()."\n".
-                        'Quantity: '.$item->getQty()."\n".
-                        'Price: '.$item->getPrice()."\n"
-                    );            
-                }
-
-                $this->logger->debug(__METHOD__ . ' subtotal ' . $quote->getSubtotal());
-                $this->logger->debug(__METHOD__ . ' grandtotal ' . $quote->getGrandTotal());
-                
-                $this->_registry->unregister('is_paypal_items');
-                $this->_registry->register('is_paypal_items', $current);
+            if ($found) {
+                unset($result[$key]);
+                continue;
             }
+
+            $found = true;
         }
+        
+        return $result;
     }
 }
  
