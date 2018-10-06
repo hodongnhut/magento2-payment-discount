@@ -81,11 +81,15 @@ class Fee extends AbstractTotal
         
         $total->setFeeAmount($fee);
         $total->setBaseFeeAmount($fee);
+        
+        $total->setTotalAmount('fee_amount', $fee);
+        $total->setBaseTotalAmount('base_fee_amount', $fee);
+        
         // // Duplicate fee added when this is added
-        // $total->setTotalAmount('fee_amount', $fee);
-        // $total->setBaseTotalAmount('base_fee_amount', $fee);
-        $total->setGrandTotal($total->getGrandTotal() + $total->getFeeAmount());
-        $total->setBaseGrandTotal($total->getBaseGrandTotal() + $total->getBaseFeeAmount());
+        // $total->setGrandTotal($total->getGrandTotal() + $total->getFeeAmount());
+        // $total->setBaseGrandTotal($total->getBaseGrandTotal() + $total->getBaseFeeAmount());
+        $total->setGrandTotal($total->getGrandTotal());
+        $total->setBaseGrandTotal($total->getBaseGrandTotal());
 
         // Make sure that quote is also updated
         $quote->setFeeAmount($fee);
