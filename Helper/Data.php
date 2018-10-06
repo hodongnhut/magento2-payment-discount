@@ -130,7 +130,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         if ($feeType != \Magento\Shipping\Model\Carrier\AbstractCarrier::HANDLING_TYPE_FIXED) {
             $subTotal = $quote->getSubtotal();
             $fee = $subTotal * ($fee / 100);
-            $fee = 100;
         }
 
         // $fee = $this->pricingHelper->currency($fee, false, false);
