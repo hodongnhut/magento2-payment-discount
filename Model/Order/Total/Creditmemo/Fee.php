@@ -7,6 +7,22 @@ use Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal;
 class Fee extends AbstractTotal
 {
     /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * Credit Memo Fee constructor.
+     * @param \Psr\Log\LoggerInterface $loggerInterface
+     */
+    public function __construct(
+        \Psr\Log\LoggerInterface $loggerInterface
+    )
+    {
+        $this->logger = $loggerInterface;
+    }
+
+    /**
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return $this
      */

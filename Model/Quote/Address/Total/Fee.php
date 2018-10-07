@@ -2,7 +2,9 @@
 
 namespace Boolfly\PaymentFee\Model\Quote\Address\Total;
 
-class Fee extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
+use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
+
+class Fee extends AbstractTotal
 {
     /**
      * @var string
@@ -16,6 +18,10 @@ class Fee extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @var \Magento\Checkout\Model\Session
      */
     protected $_checkoutSession;
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
 
     /**
      * Collect grand total address amount
@@ -33,17 +39,20 @@ class Fee extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Quote\Api\Data\PaymentInterface $payment
      * @param \Boolfly\PaymentFee\Helper\Data $helperData
+     * @param \Psr\Log\LoggerInterface $loggerInterface
      */
     public function __construct(
         \Magento\Quote\Model\QuoteValidator $quoteValidator,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Quote\Api\Data\PaymentInterface $payment,
-        \Boolfly\PaymentFee\Helper\Data $helperData
+        \Boolfly\PaymentFee\Helper\Data $helperData,
+        \Psr\Log\LoggerInterface $loggerInterface
     )
     {
         $this->_quoteValidator = $quoteValidator;
         $this->_helperData = $helperData;
         $this->_checkoutSession = $checkoutSession;
+        $this->logger = $loggerInterface;
     }
 
     /**
@@ -69,12 +78,18 @@ class Fee extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         if($this->_helperData->canApply($quote)) {
             $fee = $this->_helperData->getFee($quote);
         }
+        
         $total->setFeeAmount($fee);
         $total->setBaseFeeAmount($fee);
+        
         $total->setTotalAmount('fee_amount', $fee);
         $total->setBaseTotalAmount('base_fee_amount', $fee);
-        $total->setGrandTotal($total->getGrandTotal() + $total->getFeeAmount());
-        $total->setBaseGrandTotal($total->getBaseGrandTotal() + $total->getBaseFeeAmount());
+        
+        // // Duplicate fee added when this is added
+        // $total->setGrandTotal($total->getGrandTotal() + $total->getFeeAmount());
+        // $total->setBaseGrandTotal($total->getBaseGrandTotal() + $total->getBaseFeeAmount());
+        $total->setGrandTotal($total->getGrandTotal());
+        $total->setBaseGrandTotal($total->getBaseGrandTotal());
 
         // Make sure that quote is also updated
         $quote->setFeeAmount($fee);
@@ -98,7 +113,7 @@ class Fee extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     {
         $result = [
             'code' => $this->getCode(),
-            'title' => __('Surcharge Fee'),
+            'title' => __('Payment Fee'),
             'value' => $total->getFeeAmount()
         ];
         return $result;
@@ -111,6 +126,6 @@ class Fee extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      */
     public function getLabel()
     {
-        return __('Surcharge Fee');
+        return __('Payment Fee');
     }
 }

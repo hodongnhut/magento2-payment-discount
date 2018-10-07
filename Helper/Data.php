@@ -3,6 +3,7 @@
 namespace Boolfly\PaymentFee\Helper;
 
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -28,6 +29,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $serializer;
     /**
+     * @var Data
+     */
+    protected $pricingHelper;
+    /**
+     * @var PriceCurrency
+     */
+    protected $priceCurrency;
+    /**
      * @var LoggerInterface
      */
     protected $logger;
@@ -35,12 +44,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         SerializerInterface $serializer,
+        \Magento\Framework\Pricing\Helper\Data $pricingHelper,
+        \Magento\Directory\Model\PriceCurrency $priceCurrency,
         \Psr\Log\LoggerInterface $loggerInterface
     )
     {
         parent::__construct($context);
         $this->serializer = $serializer;
         $this->_getMethodFee();
+        $this->pricingHelper = $pricingHelper;
+        $this->priceCurrency = $priceCurrency;
         $this->logger = $loggerInterface;
     }
 
@@ -109,16 +122,20 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @return float|int
      */
     public function getFee(\Magento\Quote\Model\Quote $quote) {
+
         $method  = $quote->getPayment()->getMethod();
         $fee     = $this->methodFee[$method]['fee'];
         $feeType = $this->getFeeType();
 
-        if ($feeType == \Magento\Shipping\Model\Carrier\AbstractCarrier::HANDLING_TYPE_FIXED) {
-            return $fee;
-        } else {
+        if ($feeType != \Magento\Shipping\Model\Carrier\AbstractCarrier::HANDLING_TYPE_FIXED) {
             $subTotal = $quote->getSubtotal();
-            return ($subTotal * ($fee / 100));
+            $fee = $subTotal * ($fee / 100);
         }
+
+        // $fee = $this->pricingHelper->currency($fee, false, false);
+        $fee = $this->priceCurrency->round($fee);
+
+        return $fee;
     }
 
     /**

@@ -15,6 +15,10 @@ class AddFeeToOrderObserver implements ObserverInterface
 
     /** @var Data  */
     protected $_helper;
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
 
     /**
      * AddFeeToOrderObserver constructor.
@@ -22,11 +26,13 @@ class AddFeeToOrderObserver implements ObserverInterface
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
-        Data $helper
+        Data $helper,
+        \Psr\Log\LoggerInterface $loggerInterface
     )
     {
         $this->_checkoutSession = $checkoutSession;
         $this->_helper = $helper;
+        $this->logger = $loggerInterface;
     }
 
     /**

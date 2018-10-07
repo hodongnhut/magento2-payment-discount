@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- 
+    Paypal will reject without this with an error code #10413 because lines items + shipping + ect. != order total
+    https://webkul.com/blog/manage-custom-amount-paypal-magento2/ 
+    http://www.ibnab.com/en/blog/magento-2/magento-2-paypal-fee-charge-and-life-cycle
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Paypal\Model\Cart">
+        <plugin name="update_paypal_fee_order" type="Boolfly\PaymentFee\Plugin\UpdateFeeForOrder"/>
+    </type>
+    <type name="Magento\Paypal\Model\Api\Nvp">
+        <plugin name="log_paypal_nvp_request" type="Boolfly\PaymentFee\Plugin\LogPayPalNVPRequest"/>
+    </type>
+</config>
