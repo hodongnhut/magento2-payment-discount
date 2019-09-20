@@ -15,17 +15,6 @@ define(
     ) {
         'use strict';
 
-        var paymentFeeConfig = $.merge({is_active: false}, window.checkoutConfig.boolfly_payment_fee || {}),
-            getTotals = function() {
-                var deferred = $.Deferred();
-                isLoading(false);
-                getTotalsAction([], deferred);
-            };
-
-        if (!paymentFeeConfig.is_active) {
-            return getTotals;
-        }
-
         return function (isLoading, payment) {
             var serviceUrl = urlBuilder.build('paymentfee/checkout/totals');
             return storage.post(
@@ -34,7 +23,9 @@ define(
             ).done(
                 function(response) {
                     if (response) {
-                        getTotals();
+                        var deferred = $.Deferred();
+                        isLoading(false);
+                        getTotalsAction([], deferred);
                     }
                 }
             ).fail(
