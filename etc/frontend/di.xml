@@ -11,4 +11,11 @@
     <type name="Magento\Paypal\Model\Api\Nvp">
         <plugin name="log_paypal_nvp_request" type="Boolfly\PaymentFee\Plugin\LogPayPalNVPRequest"/>
     </type>
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="additional_provider" xsi:type="object">Boolfly\PaymentFee\Model\Config\ConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
