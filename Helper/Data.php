@@ -2,7 +2,6 @@
 
 namespace Boolfly\PaymentFee\Helper;
 
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
@@ -43,18 +42,23 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        SerializerInterface $serializer,
+        \Magento\Framework\App\ObjectManager $objectManager,
         \Magento\Framework\Pricing\Helper\Data $pricingHelper,
-        \Magento\Directory\Model\PriceCurrency $priceCurrency,
-        \Psr\Log\LoggerInterface $loggerInterface
+        \Magento\Directory\Model\PriceCurrency $priceCurrency
     )
     {
         parent::__construct($context);
-        $this->serializer = $serializer;
+        if (interface_exists(\Magento\Framework\Serialize\SerializerInterface::class)) {
+            // >= Magento 2.2
+            $this->serializer = $objectManager->get(\Magento\Framework\Serialize\SerializerInterface::class);
+        } else {
+            // < Magento 2.2
+            $this->serializer = $objectManager->get(\Magento\Framework\Unserialize\Unserialize::class);
+        }
         $this->_getMethodFee();
         $this->pricingHelper = $pricingHelper;
         $this->priceCurrency = $priceCurrency;
-        $this->logger = $loggerInterface;
+        $this->logger = $context->getLogger();
     }
 
     /**
