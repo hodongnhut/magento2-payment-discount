@@ -64,8 +64,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected function _getMethodFee() {
 
         if (is_null($this->methodFee)) {
-            $initialFees = $this->getConfig('fee');
-            $fees = is_array($initialFees) ? $initialFees : $this->serializer->unserialize($initialFees);
+            try {
+                $initialFees = $this->getConfig('fee');
+                $fees        = is_array($initialFees) ? $initialFees : $this->serializer->unserialize($initialFees);
+            } catch (\InvalidArgumentException $e) {
+                $fees = [];
+            }
 
             if(is_array($fees)) {
                 foreach ($fees as $fee) {
