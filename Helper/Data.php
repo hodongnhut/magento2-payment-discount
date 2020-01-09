@@ -42,7 +42,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\Pricing\Helper\Data $pricingHelper,
         \Magento\Directory\Model\PriceCurrency $priceCurrency
     )
