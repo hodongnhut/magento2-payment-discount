@@ -2,9 +2,9 @@
 
 namespace Boolfly\PaymentFee\Setup;
 
-use Magento\Framework\Setup\UpgradeSchemaInterface;
-use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\Setup\UpgradeSchemaInterface;
 
 class UpgradeSchema implements UpgradeSchemaInterface
 {
@@ -20,7 +20,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $setup->startSetup();
 
         // Add fee and baseFee
-        foreach(['quote', 'quote_address', 'sales_order', 'sales_invoice', 'sales_creditmemo'] as $table){
+        foreach (['quote', 'quote_address', 'sales_order', 'sales_invoice', 'sales_creditmemo'] as $table) {
             $this->addColumn($setup, $table, 'fee_amount', 'Fee Amount');
             $this->addColumn($setup, $table, 'base_fee_amount', 'Base Fee Amount');
         }
@@ -40,7 +40,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * @param string $name
      * @param string $description
      */
-    public function addColumn(SchemaSetupInterface $setup, $table, $name, $description){
+    public function addColumn(SchemaSetupInterface $setup, $table, $name, $description)
+    {
         $setup->getConnection()->addColumn(
             $setup->getTable($table),
             $name,

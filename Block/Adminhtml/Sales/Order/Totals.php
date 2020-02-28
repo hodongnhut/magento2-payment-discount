@@ -2,13 +2,17 @@
 
 namespace Boolfly\PaymentFee\Block\Adminhtml\Sales\Order;
 
-class Totals extends \Magento\Framework\View\Element\Template
+use Magento\Framework\DataObject;
+use Magento\Framework\View\Element\Template;
+use Magento\Sales\Model\Order;
+
+class Totals extends Template
 {
 
     /**
      * Retrieve current order model instance
      *
-     * @return \Magento\Sales\Model\Order
+     * @return Order
      */
     public function getOrder()
     {
@@ -35,7 +39,7 @@ class Totals extends \Magento\Framework\View\Element\Template
         if(!$this->getSource()->getFeeAmount()) {
             return $this;
         }
-        $total = new \Magento\Framework\DataObject(
+        $total = new DataObject(
             [
                 'code' => 'fee',
                 'value' => $this->getSource()->getFeeAmount(),

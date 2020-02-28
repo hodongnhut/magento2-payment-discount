@@ -12,15 +12,18 @@ define(
                 template: 'Boolfly_PaymentFee/cart/summary/fee'
             },
             totals: quote.getTotals(),
+
             isDisplayed: function() {
                 return this.getPureValue() != 0;
             },
+
             getPaymentFee: function() {
                 if (!this.totals()) {
                     return null;
                 }
                 return totals.getSegment('fee_amount').value;
             },
+
             getPureValue: function() {
                 var price = 0;
                 if (this.totals() && totals.getSegment('fee_amount').value) {
@@ -28,6 +31,7 @@ define(
                 }
                 return price;
             },
+
             getValue: function() {
                 return this.getFormattedPrice(this.getPureValue());
             }

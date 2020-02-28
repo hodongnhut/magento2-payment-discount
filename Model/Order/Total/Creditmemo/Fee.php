@@ -1,8 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Boolfly\PaymentFee\Model\Order\Total\Creditmemo;
 
+use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal;
+use Psr\Log\LoggerInterface;
 
 class Fee extends AbstractTotal
 {
@@ -13,20 +15,19 @@ class Fee extends AbstractTotal
 
     /**
      * Credit Memo Fee constructor.
-     * @param \Psr\Log\LoggerInterface $loggerInterface
+     * @param LoggerInterface $loggerInterface
      */
     public function __construct(
-        \Psr\Log\LoggerInterface $loggerInterface
-    )
-    {
+        LoggerInterface $loggerInterface
+    ) {
         $this->logger = $loggerInterface;
     }
 
     /**
-     * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
+     * @param Creditmemo $creditmemo
      * @return $this
      */
-    public function collect(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
+    public function collect(Creditmemo $creditmemo)
     {
         $order = $creditmemo->getOrder();
 
@@ -34,13 +35,13 @@ class Fee extends AbstractTotal
         $baseFeeAmountInvoiced = $order->getBaseFeeAmountInvoiced();
 
         // Nothing to refound
-        if((int)$feeAmountInvoiced === 0){
+        if ((int)$feeAmountInvoiced === 0) {
             return $this;
         }
 
         // Check if refound has already been done
         $feeAmountRefunded = $order->getFeeAmountRefunded();
-        if((int)$feeAmountRefunded === 0){
+        if ((int)$feeAmountRefunded === 0) {
             $creditmemo->setGrandTotal($creditmemo->getGrandTotal() + $feeAmountInvoiced);
             $creditmemo->setBaseGrandTotal($creditmemo->getBaseGrandTotal() + $baseFeeAmountInvoiced);
             $creditmemo->setFeeAmount($feeAmountInvoiced);

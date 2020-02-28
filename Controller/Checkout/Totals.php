@@ -1,24 +1,32 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Boolfly\PaymentFee\Controller\Checkout;
 
-use Magento\Framework\App\Action\Context;
+use Exception;
 use Magento\Checkout\Model\Session;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\Result\Raw;
+use Magento\Framework\Json\Helper\Data;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Psr\Log\LoggerInterface;
 
-class Totals extends \Magento\Framework\App\Action\Action
+class Totals extends Action
 {
     /**
-     * @var \Magento\Checkout\Model\Session
+     * @var Session
      */
     protected $_checkoutSession;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @var JsonFactory
      */
     protected $_resultJson;
 
     /**
-     * @var \Magento\Framework\Json\Helper\Data
+     * @var Data
      */
     protected $_helper;
     /**
@@ -27,19 +35,18 @@ class Totals extends \Magento\Framework\App\Action\Action
     protected $logger;
 
     /**
-     * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @var CartRepositoryInterface
      */
     protected $quoteRepository;
 
     public function __construct(
         Context $context,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Framework\Json\Helper\Data $helper,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJson,
-        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
-        \Psr\Log\LoggerInterface $loggerInterface
-    )
-    {
+        Session $checkoutSession,
+        Data $helper,
+        JsonFactory $resultJson,
+        CartRepositoryInterface $quoteRepository,
+        LoggerInterface $loggerInterface
+    ) {
         parent::__construct($context);
         $this->_checkoutSession = $checkoutSession;
         $this->_helper = $helper;
@@ -51,7 +58,7 @@ class Totals extends \Magento\Framework\App\Action\Action
     /**
      * Trigger to re-calculate the collect Totals
      *
-     * @return bool
+     * @return Json
      */
     public function execute()
     {
@@ -68,16 +75,14 @@ class Totals extends \Magento\Framework\App\Action\Action
             $this->_checkoutSession->getQuote()->getPayment()->setMethod($payment['payment']);
             $quote->collectTotals();
             $this->quoteRepository->save($quote);
-
-
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $response = [
                 'errors' => true,
                 'message' => $e->getMessage()
             ];
         }
 
-        /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
+        /** @var Raw $resultRaw */
         $resultJson = $this->_resultJson->create();
         return $resultJson->setData($response);
     }

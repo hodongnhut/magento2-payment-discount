@@ -14,9 +14,11 @@ define(
             },
             totals: quote.getTotals(),
             isTaxDisplayedInGrandTotal: window.checkoutConfig.includeTaxInGrandTotal || false,
+
             isDisplayed: function() {
                 return this.isFullMode();
             },
+
             getValue: function() {
                 var price = 0;
                 if (this.totals()) {
@@ -24,6 +26,7 @@ define(
                 }
                 return this.getFormattedPrice(price);
             },
+
             getBaseValue: function() {
                 var price = 0;
                 if (this.totals()) {

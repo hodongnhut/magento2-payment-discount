@@ -1,25 +1,28 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Boolfly\PaymentFee\Model\Config;
+
+use Boolfly\PaymentFee\Helper\Data;
+use Magento\Checkout\Model\ConfigProviderInterface;
 
 /**
  * Class ConfigProvider
  *
  * @package Boolfly\PaymentFee\Model\Config
  */
-class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
+class ConfigProvider implements ConfigProviderInterface
 {
     /**
-     * @var \Boolfly\PaymentFee\Helper\Data
+     * @var Data
      */
     private $configHelper;
 
     /**
      * ConfigProvider constructor.
      *
-     * @param \Boolfly\PaymentFee\Helper\Data $configHelper
+     * @param Data $configHelper
      */
-    public function __construct(\Boolfly\PaymentFee\Helper\Data $configHelper)
+    public function __construct(Data $configHelper)
     {
         $this->configHelper = $configHelper;
     }

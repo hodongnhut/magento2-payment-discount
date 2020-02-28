@@ -1,12 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Boolfly\PaymentFee\Model\Order\Total\Invoice;
 
+use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Invoice\Total\AbstractTotal;
+use Psr\Log\LoggerInterface;
 
 class Fee extends AbstractTotal
 {
-
     /**
      * @var LoggerInterface
      */
@@ -14,23 +15,22 @@ class Fee extends AbstractTotal
 
     /**
      * Invoice Fee constructor.
-     * @param \Psr\Log\LoggerInterface $loggerInterface
+     * @param LoggerInterface $loggerInterface
      */
     public function __construct(
-        \Psr\Log\LoggerInterface $loggerInterface
-    )
-    {
+        LoggerInterface $loggerInterface
+    ) {
         $this->logger = $loggerInterface;
     }
 
     /**
      * Collect invoice subtotal
      *
-     * @param \Magento\Sales\Model\Order\Invoice $invoice
+     * @param Invoice $invoice
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function collect(\Magento\Sales\Model\Order\Invoice $invoice)
+    public function collect(Invoice $invoice)
     {
         $order = $invoice->getOrder();
         $feeAmount = $order->getFeeAmount();

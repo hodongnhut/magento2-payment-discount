@@ -1,8 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Boolfly\PaymentFee\Block\Adminhtml\System\Config\Field;
 
-class Fee extends \Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
+use Exception;
+use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+
+class Fee extends AbstractFieldArray
 {
     protected $_columns = [];
 
@@ -10,8 +15,8 @@ class Fee extends \Magento\Config\Block\System\Config\Form\Field\FieldArray\Abst
 
     protected $_searchFieldRenderer;
 
-    protected function _prepareToRender() {
-
+    protected function _prepareToRender()
+    {
         $this->_typeRenderer        = null;
         $this->_searchFieldRenderer = null;
 
@@ -26,10 +31,10 @@ class Fee extends \Magento\Config\Block\System\Config\Form\Field\FieldArray\Abst
     /**
      * @param string $columnName
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
-    public function renderCellTemplate($columnName) {
-
+    public function renderCellTemplate($columnName)
+    {
         $inputName = $this->getElement()->getName() . '[#{_id}][' . $columnName . ']';
         if ($columnName == "payment_method") {
             return $this->_getPaymentRenderer()
@@ -37,7 +42,7 @@ class Fee extends \Magento\Config\Block\System\Config\Form\Field\FieldArray\Abst
                 ->setTitle($columnName)
                 ->setExtraParams('style="width:260px"')
                 ->setClass('validate-select')
-                ->setOptions(Mage::getModel("adminhtml/system_config_source_payment_allowedmethods")->toOptionArray(NULL))
+                ->setOptions(Mage::getModel("adminhtml/system_config_source_payment_allowedmethods")->toOptionArray(null))
                 ->toHtml();
         } elseif ($columnName == "fee") {
             $this->_columns[$columnName]['class'] = 'input-text required-entry validate-number';
@@ -45,17 +50,15 @@ class Fee extends \Magento\Config\Block\System\Config\Form\Field\FieldArray\Abst
         }
 
         return parent::renderCellTemplate($columnName);
-
     }
 
     /**
      * @return mixed
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
-    protected function _getPaymentRenderer() {
-
+    protected function _getPaymentRenderer()
+    {
         if (!$this->_typeRenderer) {
-
             $this->_typeRenderer = $this->getLayout()
                 ->createBlock('Boolfly\PaymentFee\Adminhtml\System\Config\Render\Select')
                 ->setIsRenderToJsTemplate(true);
@@ -64,10 +67,11 @@ class Fee extends \Magento\Config\Block\System\Config\Form\Field\FieldArray\Abst
     }
 
     /**
-     * @param \Magento\Framework\DataObject $row
+     * @param DataObject $row
+     * @throws LocalizedException
      */
-    protected function _prepareArrayRow(\Magento\Framework\DataObject $row) {
-
+    protected function _prepareArrayRow(DataObject $row)
+    {
         $row->setData('option_extra_attr_' . $this->_getPaymentRenderer()->calcOptionHash($row->getData('payment_method')), 'selected="selected"');
     }
 }

@@ -1,8 +1,17 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Boolfly\PaymentFee\Model\Quote\Address\Total;
 
+use Boolfly\PaymentFee\Helper\Data;
+use Magento\Checkout\Model\Session;
+use Magento\Framework\Phrase;
+use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\Quote\Api\Data\ShippingAssignmentInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address\Total;
 use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
+use Magento\Quote\Model\QuoteValidator;
+use Psr\Log\LoggerInterface;
 
 class Fee extends AbstractTotal
 {
@@ -11,11 +20,11 @@ class Fee extends AbstractTotal
      */
     protected $_code = 'fee';
     /**
-     * @var \Boolfly\PaymentFee\Helper\Data
+     * @var Data
      */
     protected $_helperData;
     /**
-     * @var \Magento\Checkout\Model\Session
+     * @var Session
      */
     protected $_checkoutSession;
     /**
@@ -26,29 +35,28 @@ class Fee extends AbstractTotal
     /**
      * Collect grand total address amount
      *
-     * @param \Magento\Quote\Model\Quote $quote
-     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
-     * @param \Magento\Quote\Model\Quote\Address\Total $total
+     * @param Quote $quote
+     * @param ShippingAssignmentInterface $shippingAssignment
+     * @param Total $total
      * @return $this
      */
     protected $_quoteValidator = null;
 
     /**
      * Payment Fee constructor.
-     * @param \Magento\Quote\Model\QuoteValidator $quoteValidator
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Quote\Api\Data\PaymentInterface $payment
-     * @param \Boolfly\PaymentFee\Helper\Data $helperData
-     * @param \Psr\Log\LoggerInterface $loggerInterface
+     * @param QuoteValidator $quoteValidator
+     * @param Session $checkoutSession
+     * @param PaymentInterface $payment
+     * @param Data $helperData
+     * @param LoggerInterface $loggerInterface
      */
     public function __construct(
-        \Magento\Quote\Model\QuoteValidator $quoteValidator,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Quote\Api\Data\PaymentInterface $payment,
-        \Boolfly\PaymentFee\Helper\Data $helperData,
-        \Psr\Log\LoggerInterface $loggerInterface
-    )
-    {
+        QuoteValidator $quoteValidator,
+        Session $checkoutSession,
+        PaymentInterface $payment,
+        Data $helperData,
+        LoggerInterface $loggerInterface
+    ) {
         $this->_quoteValidator = $quoteValidator;
         $this->_helperData = $helperData;
         $this->_checkoutSession = $checkoutSession;
@@ -58,15 +66,15 @@ class Fee extends AbstractTotal
     /**
      * Collect totals process.
      *
-     * @param \Magento\Quote\Model\Quote $quote
-     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
-     * @param \Magento\Quote\Model\Quote\Address\Total $total
+     * @param Quote $quote
+     * @param ShippingAssignmentInterface $shippingAssignment
+     * @param Total $total
      * @return $this
      */
     public function collect(
-        \Magento\Quote\Model\Quote $quote,
-        \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
-        \Magento\Quote\Model\Quote\Address\Total $total
+        Quote $quote,
+        ShippingAssignmentInterface $shippingAssignment,
+        Total $total
     ) {
         parent::collect($quote, $shippingAssignment, $total);
 
@@ -75,16 +83,16 @@ class Fee extends AbstractTotal
         }
 
         $fee = 0;
-        if($this->_helperData->canApply($quote)) {
+        if ($this->_helperData->canApply($quote)) {
             $fee = $this->_helperData->getFee($quote);
         }
-        
+
         $total->setFeeAmount($fee);
         $total->setBaseFeeAmount($fee);
-        
+
         $total->setTotalAmount('fee_amount', $fee);
         $total->setBaseTotalAmount('base_fee_amount', $fee);
-        
+
         // // Duplicate fee added when this is added
         // $total->setGrandTotal($total->getGrandTotal() + $total->getFeeAmount());
         // $total->setBaseGrandTotal($total->getBaseGrandTotal() + $total->getBaseFeeAmount());
@@ -101,16 +109,15 @@ class Fee extends AbstractTotal
     /**
      * Assign subtotal amount and label to address object
      *
-     * @param \Magento\Quote\Model\Quote $quote
-     * @param \Magento\Quote\Model\Quote\Address\Total $total
+     * @param Quote $quote
+     * @param Total $total
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetch(
-        \Magento\Quote\Model\Quote $quote,
-        \Magento\Quote\Model\Quote\Address\Total $total
-    )
-    {
+        Quote $quote,
+        Total $total
+    ) {
         $result = [
             'code' => $this->getCode(),
             'title' => __('Payment Fee'),
@@ -122,7 +129,7 @@ class Fee extends AbstractTotal
     /**
      * Get Subtotal label
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getLabel()
     {

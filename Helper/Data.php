@@ -1,12 +1,20 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Boolfly\PaymentFee\Helper;
 
-use Magento\Framework\Pricing\PriceCurrencyInterface;
+use InvalidArgumentException;
+use Magento\Directory\Model\PriceCurrency;
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Unserialize\Unserialize;
+use Magento\Quote\Model\Quote;
+use Magento\Shipping\Model\Carrier\AbstractCarrier;
+use Magento\Store\Model\ScopeInterface;
 
-class Data extends \Magento\Framework\App\Helper\AbstractHelper
+class Data extends AbstractHelper
 {
-
     /**
      * Recipient fixed amount of custom payment config path
      */
@@ -18,7 +26,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @var array
      */
-    public $methodFee = NULL;
+    public $methodFee = null;
     /**
      * Constructor
      */
@@ -40,20 +48,26 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $logger;
 
+    /**
+     * Data constructor.
+     * @param Context $context
+     * @param ObjectManagerInterface $objectManager
+     * @param \Magento\Framework\Pricing\Helper\Data $pricingHelper
+     * @param PriceCurrency $priceCurrency
+     */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
+        Context $context,
+        ObjectManagerInterface $objectManager,
         \Magento\Framework\Pricing\Helper\Data $pricingHelper,
-        \Magento\Directory\Model\PriceCurrency $priceCurrency
-    )
-    {
+        PriceCurrency $priceCurrency
+    ) {
         parent::__construct($context);
-        if (interface_exists(\Magento\Framework\Serialize\SerializerInterface::class)) {
+        if (interface_exists(SerializerInterface::class)) {
             // >= Magento 2.2
-            $this->serializer = $objectManager->get(\Magento\Framework\Serialize\SerializerInterface::class);
+            $this->serializer = $objectManager->get(SerializerInterface::class);
         } else {
             // < Magento 2.2
-            $this->serializer = $objectManager->get(\Magento\Framework\Unserialize\Unserialize::class);
+            $this->serializer = $objectManager->get(Unserialize::class);
         }
         $this->_getMethodFee();
         $this->pricingHelper = $pricingHelper;
@@ -65,25 +79,24 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve Payment Method Fees from Store Config
      * @return array
      */
-    protected function _getMethodFee() {
-
+    protected function _getMethodFee()
+    {
         if (is_null($this->methodFee)) {
             try {
                 $initialFees = $this->getConfig('fee');
                 $fees        = is_array($initialFees) ? $initialFees : $this->serializer->unserialize($initialFees);
-            } catch (\InvalidArgumentException $e) {
+            } catch (InvalidArgumentException $e) {
                 $fees = [];
             }
 
-            if(is_array($fees)) {
+            if (is_array($fees)) {
                 foreach ($fees as $fee) {
-                    $this->methodFee[$fee['payment_method']] = array(
+                    $this->methodFee[$fee['payment_method']] = [
                         'fee'         => $fee['fee'],
                         'description' => $fee['description']
-                    );
+                    ];
                 }
             }
-
         }
         return $this->methodFee;
     }
@@ -93,26 +106,29 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $field
      * @return mixed|null
      */
-    public function getConfig($field = '') {
+    public function getConfig($field = '')
+    {
         if ($field) {
-            $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
+            $storeScope = ScopeInterface::SCOPE_STORE;
             return $this->scopeConfig->getValue(self::CONFIG_PAYMENT_FEE . $field, $storeScope);
         }
-        return NULL;
+        return null;
     }
 
     /**
      * Check if Extension is Enabled config
      * @return bool
      */
-    public function isEnabled() {
+    public function isEnabled()
+    {
         return $this->getConfig('enabled');
     }
     /**
-     * @param \Magento\Quote\Model\Quote $quote
+     * @param Quote $quote
      * @return bool
      */
-    public function canApply(\Magento\Quote\Model\Quote $quote) {
+    public function canApply(Quote $quote)
+    {
 
         /**@TODO check module or config**/
         if ($this->isEnabled()) {
@@ -126,16 +142,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote $quote
+     * @param Quote $quote
      * @return float|int
      */
-    public function getFee(\Magento\Quote\Model\Quote $quote) {
-
+    public function getFee(Quote $quote)
+    {
         $method  = $quote->getPayment()->getMethod();
         $fee     = $this->methodFee[$method]['fee'];
         $feeType = $this->getFeeType();
 
-        if ($feeType != \Magento\Shipping\Model\Carrier\AbstractCarrier::HANDLING_TYPE_FIXED) {
+        if ($feeType != AbstractCarrier::HANDLING_TYPE_FIXED) {
             $subTotal = $quote->getSubtotal();
             $fee = $subTotal * ($fee / 100);
         }

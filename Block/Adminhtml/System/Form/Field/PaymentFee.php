@@ -1,8 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Boolfly\PaymentFee\Block\Adminhtml\System\Form\Field;
 
-class PaymentFee extends  \Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
+use Boolfly\PaymentFee\Model\Config\ActiveMethods;
+use Magento\Backend\Block\Template\Context;
+use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+
+class PaymentFee extends AbstractFieldArray
 {
     protected $_columns = [];
 
@@ -14,20 +20,18 @@ class PaymentFee extends  \Magento\Config\Block\System\Config\Form\Field\FieldAr
     protected $_searchFieldRenderer;
 
     /**
-     * @var \Boolfly\PaymentFee\Model\Config\ActiveMethods
+     * @var ActiveMethods
      */
     protected $activeMethods;
 
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Boolfly\PaymentFee\Model\Config\ActiveMethods $activeMethods,
+        Context $context,
+        ActiveMethods $activeMethods,
         array $data = []
-    )
-    {
+    ) {
         $this->activeMethods = $activeMethods;
         parent::__construct($context, $data);
     }
-
 
     /**
      * Prepare to render
@@ -50,14 +54,14 @@ class PaymentFee extends  \Magento\Config\Block\System\Config\Form\Field\FieldAr
         $this->_addButtonLabel = __('Add Fee');
     }
 
-
     /**
      * Retrieve active payment methods renderer
      *
      * @return Methods
+     * @throws LocalizedException
      */
-    protected function _getPaymentRenderer() {
-
+    protected function _getPaymentRenderer()
+    {
         if (!$this->_typeRenderer) {
             $this->_typeRenderer = $this->getLayout()->createBlock(
                 'Boolfly\PaymentFee\Block\Adminhtml\System\Form\Field\Methods',
@@ -68,14 +72,16 @@ class PaymentFee extends  \Magento\Config\Block\System\Config\Form\Field\FieldAr
         }
         return $this->_typeRenderer;
     }
+
     /**
      * Prepare existing row data object
      *
-     * @param \Magento\Framework\DataObject $row
+     * @param DataObject $row
      * @return void
+     * @throws LocalizedException
      */
-    protected function _prepareArrayRow(\Magento\Framework\DataObject $row) {
-
+    protected function _prepareArrayRow(DataObject $row)
+    {
         $optionExtraAttr = [];
         $optionExtraAttr['option_' . $this->_getPaymentRenderer()->calcOptionHash($row->getData('payment_method'))] =
             'selected="selected"';

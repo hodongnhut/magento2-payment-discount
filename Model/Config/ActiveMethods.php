@@ -1,21 +1,31 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Boolfly\PaymentFee\Model\Config;
+
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Payment\Model\Config;
 
 class ActiveMethods
 {
     /**
-     * @var \Magento\Payment\Model\Config
+     * @var Config
      */
     protected $paymentConfig;
 
+    /**
+     * @var ScopeConfigInterface
+     */
     protected $scopeConfig;
 
+    /**
+     * ActiveMethods constructor.
+     * @param Config $config
+     * @param ScopeConfigInterface $scopeConfig
+     */
     public function __construct(
-        \Magento\Payment\Model\Config $config,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-    )
-    {
+        Config $config,
+        ScopeConfigInterface $scopeConfig
+    ) {
         $this->paymentConfig = $config;
         $this->scopeConfig = $scopeConfig;
     }
@@ -31,7 +41,7 @@ class ActiveMethods
         $payments = $this->_getPaymentMethods();
 
         foreach ($payments as $paymentCode => $paymentModel) {
-            $paymentTitle = $this->scopeConfig->getValue('payment/'.$paymentCode.'/title');
+            $paymentTitle = $this->scopeConfig->getValue('payment/' . $paymentCode . '/title');
             $methods[$paymentCode] = [
                 'label'   => $paymentTitle,
                 'value' => $paymentCode

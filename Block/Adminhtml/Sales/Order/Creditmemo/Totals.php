@@ -1,14 +1,17 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Boolfly\PaymentFee\Block\Adminhtml\Sales\Order\Creditmemo;
 
-class Totals extends \Magento\Framework\View\Element\Template
+use Magento\Framework\DataObject;
+use Magento\Framework\View\Element\Template;
+
+class Totals extends Template
 {
 
     /**
      * Get data (totals) source model
      *
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     public function getSource()
     {
@@ -33,7 +36,7 @@ class Totals extends \Magento\Framework\View\Element\Template
         if(!$this->getSource()->getFeeAmount()) {
             return $this;
         }
-        $fee = new \Magento\Framework\DataObject(
+        $fee = new DataObject(
             [
                 'code' => 'fee',
                 'strong' => false,
