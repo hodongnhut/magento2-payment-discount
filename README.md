@@ -15,6 +15,12 @@ https://magento.stackexchange.com/questions/204532/magento-2-2-1-how-to-give-dis
 
 -Replace a default JS component: http://devdocs.magento.com/guides/v2.0/javascript-dev-guide/javascript/custom_js.html
 
+Magento 2 - How to add custom discount in cart programmatically
+https://magento.stackexchange.com/questions/104112/magento-2-how-to-add-custom-discount-in-cart-programmatically
+
+Magento 2 - discount depend on Payment Method does not work
+https://magento.stackexchange.com/questions/128580/magento-2-discount-depend-on-payment-method-does-not-work
+
 **Admin Config:**
 Admin -> Store Config ->Sales -> Payment Discount
 ![image](https://user-images.githubusercontent.com/8769219/175768768-f3418965-0cf7-4691-96a3-7d2feeb2d30c.png)
