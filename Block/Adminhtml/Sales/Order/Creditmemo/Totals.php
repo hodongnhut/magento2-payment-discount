@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Boolfly\PaymentFee\Block\Adminhtml\Sales\Order\Creditmemo;
+namespace Lg\PaymentDiscount\Block\Adminhtml\Sales\Order\Creditmemo;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\Template;

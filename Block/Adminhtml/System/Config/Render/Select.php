@@ -1,6 +1,6 @@
 <?php
 
-namespace Boolfly\PaymentFee\Block\Adminhtml\System\Config\Render;
+namespace Lg\PaymentDiscount\Block\Adminhtml\System\Config\Render;
 
 class Select extends \Magento\Framework\View\Element\Html\Select
 {

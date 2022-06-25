@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Boolfly\PaymentFee\Model\Order\Total\Creditmemo;
+namespace Lg\PaymentDiscount\Model\Order\Total\Creditmemo;
 
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal;

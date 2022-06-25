@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Boolfly\PaymentFee\Block\Adminhtml\System\Config\Field;
+namespace Lg\PaymentDiscount\Block\Adminhtml\System\Config\Field;
 
 use Exception;
 use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
@@ -21,11 +21,11 @@ class Fee extends AbstractFieldArray
         $this->_searchFieldRenderer = null;
 
         $this->addColumn('payment_method', ['label' => __('Payment Method')]);
-        $this->addColumn('fee', ['label' => __('Fee')]);
+        $this->addColumn('fee', ['label' => __('Discount')]);
         $this->addColumn('description', ['label' => __('Description')]);
 
         $this->_addAfter       = false;
-        $this->_addButtonLabel = __('Add Fee');
+        $this->_addButtonLabel = __('Add Discount');
     }
 
     /**
@@ -60,7 +60,7 @@ class Fee extends AbstractFieldArray
     {
         if (!$this->_typeRenderer) {
             $this->_typeRenderer = $this->getLayout()
-                ->createBlock('Boolfly\PaymentFee\Adminhtml\System\Config\Render\Select')
+                ->createBlock('Lg\PaymentDiscount\Adminhtml\System\Config\Render\Select')
                 ->setIsRenderToJsTemplate(true);
         }
         return $this->_typeRenderer;

@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Boolfly\PaymentFee\Block\Adminhtml\System\Form\Field;
+namespace Lg\PaymentDiscount\Block\Adminhtml\System\Form\Field;
 
-use Boolfly\PaymentFee\Model\Config\ActiveMethods;
+use Lg\PaymentDiscount\Model\Config\ActiveMethods;
 use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 
-class PaymentFee extends AbstractFieldArray
+class PaymentDiscount extends AbstractFieldArray
 {
     protected $_columns = [];
 
@@ -48,10 +48,10 @@ class PaymentFee extends AbstractFieldArray
             ['label' => __('Payment Method'), 'renderer' => $this->_getPaymentRenderer()]
         );
 
-        $this->addColumn('fee', ['label' => __('Fee')]);
+        $this->addColumn('fee', ['label' => __('Discount')]);
         $this->addColumn('description', ['label' => __('Description')]);
         $this->_addAfter       = false;
-        $this->_addButtonLabel = __('Add Fee');
+        $this->_addButtonLabel = __('Add Discount');
     }
 
     /**
@@ -64,7 +64,7 @@ class PaymentFee extends AbstractFieldArray
     {
         if (!$this->_typeRenderer) {
             $this->_typeRenderer = $this->getLayout()->createBlock(
-                'Boolfly\PaymentFee\Block\Adminhtml\System\Form\Field\Methods',
+                'Lg\PaymentDiscount\Block\Adminhtml\System\Form\Field\Methods',
                 '',
                 ['data' => ['is_render_to_js_template' => true]]
             );

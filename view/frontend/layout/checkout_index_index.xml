@@ -16,12 +16,12 @@
                                             <item name="children" xsi:type="array">
                                                 <item name="totals" xsi:type="array">
                                                     <item name="children" xsi:type="array">
-                                                        <item name="feeamount" xsi:type="array">
-                                                            <item name="component"  xsi:type="string">Boolfly_PaymentFee/js/view/checkout/cart/totals/fee</item>
-                                                            <item name="sortOrder" xsi:type="string">20</item>
+                                                        <item name="discountamount" xsi:type="array">
+                                                            <item name="component"  xsi:type="string">Lg_PaymentDiscount/js/view/checkout/cart/totals/discount</item>
+                                                            <item name="sortOrder" xsi:type="string">35</item>
                                                             <item name="config" xsi:type="array">
-                                                                <item name="template" xsi:type="string">Boolfly_PaymentFee/checkout/cart/totals/fee</item>
-                                                                <item name="title" xsi:type="string" translate="true">Payment Fee</item>
+                                                                <item name="template" xsi:type="string">Lg_PaymentDiscount/checkout/cart/totals/discount</item>
+                                                                <item name="title" xsi:type="string" translate="true">Payment Discount</item>
                                                             </item>
                                                         </item>
                                                     </item>

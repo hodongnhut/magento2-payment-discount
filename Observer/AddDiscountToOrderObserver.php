@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Boolfly\PaymentFee\Observer;
+namespace Lg\PaymentDiscount\Observer;
 
-use Boolfly\PaymentFee\Helper\Data;
+use Lg\PaymentDiscount\Helper\Data;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
@@ -46,14 +46,11 @@ class AddFeeToOrderObserver implements ObserverInterface
     {
         $quote = $observer->getQuote();
         if ($this->_helper->canApply($quote)) {
-            $feeAmount = $this->_helper->getFee($quote);
-
-            //Set fee data to order
+            $discount = $this->_helper->getDiscount($quote);
             $order = $observer->getOrder();
-            $order->setData('fee_amount', $feeAmount);
-            $order->setData('base_fee_amount', $feeAmount);
+            $order->setData('discount_payment_amount', $discount);
+            $order->setData('base_discount_payment_amount', $discount);
         }
-
         return $this;
     }
 }

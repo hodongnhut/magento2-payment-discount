@@ -3,7 +3,7 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" label="Email Invoice Items List" design_abstraction="custom">
     <body>
         <referenceBlock name="invoice_totals">
-            <block class="Boolfly\PaymentFee\Block\Sales\Totals" name="fee_amount" as="fee_amount"/>
+            <block class="Lg\PaymentDiscount\Block\Sales\Totals" name="discount_amount" as="discount_amount"/>
         </referenceBlock>
     </body>
 </page>

@@ -1,6 +1,6 @@
 <?php
 
-namespace Boolfly\PaymentFee\Setup;
+namespace Lg\PaymentDiscount\Setup;
 
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
@@ -19,17 +19,17 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         $setup->startSetup();
 
-        // Add fee and baseFee
+        // Add discount and baseDiscount
         foreach (['quote', 'quote_address', 'sales_order', 'sales_invoice', 'sales_creditmemo'] as $table) {
-            $this->addColumn($setup, $table, 'fee_amount', 'Fee Amount');
-            $this->addColumn($setup, $table, 'base_fee_amount', 'Base Fee Amount');
+            $this->addColumn($setup, $table, 'discount_payment_amount', 'Discount Amount');
+            $this->addColumn($setup, $table, 'base_discount_payment_amount', 'Base Discount Amount');
         }
 
         // Add feeInvoiced, baseFeeInvoiced, feeRefunded, baseFeeRefunded
-        $this->addColumn($setup, 'sales_order', 'fee_amount_invoiced', 'Fee Amount Invoiced');
-        $this->addColumn($setup, 'sales_order', 'base_fee_amount_invoiced', 'Base Fee Amount Invoiced');
-        $this->addColumn($setup, 'sales_order', 'fee_amount_refunded', 'Fee Amount Refunded');
-        $this->addColumn($setup, 'sales_order', 'base_fee_amount_refunded', 'Base Fee Amount Refunded');
+        $this->addColumn($setup, 'sales_order', 'discount_payment_amount_invoiced', 'Discount Amount Invoiced');
+        $this->addColumn($setup, 'sales_order', 'base_discount_payment_amount_invoiced', 'Base Discount Amount Invoiced');
+        $this->addColumn($setup, 'sales_order', 'discount_payment_amount_refunded', 'Discount Amount Refunded');
+        $this->addColumn($setup, 'sales_order', 'base_discount_payment_amount_refunded', 'Base Discount Amount Refunded');
 
         $setup->endSetup();
     }

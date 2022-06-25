@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Boolfly\PaymentFee\Block\Adminhtml\System\Form\Field;
+namespace Lg\PaymentDiscount\Block\Adminhtml\System\Form\Field;
 
 use Magento\Framework\View\Element\Context;
 use Magento\Framework\View\Element\Html\Select;

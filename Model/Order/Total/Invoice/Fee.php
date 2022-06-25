@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Boolfly\PaymentFee\Model\Order\Total\Invoice;
+namespace Lg\PaymentDiscount\Model\Order\Total\Invoice;
 
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Invoice\Total\AbstractTotal;

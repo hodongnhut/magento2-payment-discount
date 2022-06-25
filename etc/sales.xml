@@ -3,17 +3,17 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Sales:etc/sales.xsd">
     <section name="quote">
         <group name="totals">
-            <item name="fee_amount" instance="Boolfly\PaymentFee\Model\Quote\Address\Total\Fee" sort_order="150"/>
+            <item name="discount_payment_amount" instance="Lg\PaymentDiscount\Model\Quote\Address\Total\Discount" sort_order="150"/>
         </group>
     </section>
-    <section name="order_invoice">
+    <!-- <section name="order_invoice">
         <group name="totals">
-            <item name="fee_amount" instance="Boolfly\PaymentFee\Model\Order\Total\Invoice\Fee" sort_order="160"/>
+            <item name="discount_amount" instance="Lg\PaymentDiscount\Model\Order\Total\Invoice\Fee" sort_order="160"/>
         </group>
     </section>
     <section name="order_creditmemo">
         <group name="totals">
-            <item name="fee_amount" instance="Boolfly\PaymentFee\Model\Order\Total\Creditmemo\Fee" sort_order="160"/>
+            <item name="discount_amount" instance="Lg\PaymentDiscount\Model\Order\Total\Creditmemo\Fee" sort_order="160"/>
         </group>
-    </section>
+    </section> -->
 </config>

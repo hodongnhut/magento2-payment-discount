@@ -6,15 +6,15 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Paypal\Model\Cart">
-        <plugin name="update_paypal_fee_order" type="Boolfly\PaymentFee\Plugin\UpdateFeeForOrder"/>
+        <plugin name="update_paypal_fee_order" type="Lg\PaymentDiscount\Plugin\UpdateFeeForOrder"/>
     </type>
-    <type name="Magento\Paypal\Model\Api\Nvp">
-        <plugin name="log_paypal_nvp_request" type="Boolfly\PaymentFee\Plugin\LogPayPalNVPRequest"/>
-    </type>
+    <!-- <type name="Magento\Paypal\Model\Api\Nvp">
+        <plugin name="log_paypal_nvp_request" type="Lg\PaymentDiscount\Plugin\LogPayPalNVPRequest"/>
+    </type> -->
     <type name="Magento\Checkout\Model\CompositeConfigProvider">
         <arguments>
             <argument name="configProviders" xsi:type="array">
-                <item name="additional_provider" xsi:type="object">Boolfly\PaymentFee\Model\Config\ConfigProvider</item>
+                <item name="additional_provider" xsi:type="object">Lg\PaymentDiscount\Model\Config\ConfigProvider</item>
             </argument>
         </arguments>
     </type>

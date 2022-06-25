@@ -6,8 +6,7 @@
 var config = {
     map: {
         '*': {
-            'Magento_Sales/order/create/scripts':
-                'Boolfly_PaymentFee/js/order/create/scripts'
+            'Magento_Sales/order/create/scripts':'Lg_PaymentDiscount/js/order/create/scripts'
         }
     }
 };

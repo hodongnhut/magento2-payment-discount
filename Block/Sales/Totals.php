@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Boolfly\PaymentFee\Block\Sales;
+namespace Lg\PaymentDiscount\Block\Sales;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\Template;

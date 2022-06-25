@@ -1,6 +1,6 @@
 <?php
 
-namespace Boolfly\PaymentFee\Block\Adminhtml\Sales\Order;
+namespace Lg\PaymentDiscount\Block\Adminhtml\Sales\Order;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\Template;

@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Boolfly\PaymentFee\Model\Config;
+namespace Lg\PaymentDiscount\Model\Config;
 
-use Boolfly\PaymentFee\Helper\Data;
+use Lg\PaymentDiscount\Helper\Data;
 use Magento\Checkout\Model\ConfigProviderInterface;
 
 /**
  * Class ConfigProvider
  *
- * @package Boolfly\PaymentFee\Model\Config
+ * @package Lg\PaymentDiscount\Model\Config
  */
 class ConfigProvider implements ConfigProviderInterface
 {
@@ -33,7 +33,7 @@ class ConfigProvider implements ConfigProviderInterface
     public function getConfig()
     {
         return [
-            'boolfly_payment_fee' => ['is_active' => $this->configHelper->isEnabled()],
+            'lg_payment_discount' => ['is_active' => $this->configHelper->isEnabled()],
         ];
     }
 }

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Boolfly\PaymentFee\Plugin;
+namespace Lg\PaymentDiscount\Plugin;
 
 use Magento\Paypal\Model\Api\Nvp;
 use Psr\Log\LoggerInterface;

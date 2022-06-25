@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Boolfly\PaymentFee\Helper;
+namespace Lg\PaymentDiscount\Helper;
 
 use InvalidArgumentException;
 use Magento\Directory\Model\PriceCurrency;
@@ -18,15 +18,15 @@ class Data extends AbstractHelper
     /**
      * Recipient fixed amount of custom payment config path
      */
-    const CONFIG_PAYMENT_FEE = 'paymentfee/config/';
+    const CONFIG_PAYMENT_DISCOUNT = 'paymentdiscount/config/';
     /**
      * Total Code
      */
-    const TOTAL_CODE = 'fee_amount';
+    const TOTAL_CODE = 'discount_amount';
     /**
      * @var array
      */
-    public $methodFee = null;
+    public $methodDiscount = null;
     /**
      * Constructor
      */
@@ -69,7 +69,7 @@ class Data extends AbstractHelper
             // < Magento 2.2
             $this->serializer = $objectManager->get(Unserialize::class);
         }
-        $this->_getMethodFee();
+        $this->_getMethodDiscount();
         $this->pricingHelper = $pricingHelper;
         $this->priceCurrency = $priceCurrency;
         $this->logger = $context->getLogger();
@@ -79,11 +79,11 @@ class Data extends AbstractHelper
      * Retrieve Payment Method Fees from Store Config
      * @return array
      */
-    protected function _getMethodFee()
+    protected function _getMethodDiscount()
     {
-        if (is_null($this->methodFee)) {
+        if (is_null($this->methodDiscount)) {
             try {
-                $initialFees = $this->getConfig('fee');
+                $initialFees = $this->getConfig('discount');
                 $fees        = is_array($initialFees) ? $initialFees : $this->serializer->unserialize($initialFees);
             } catch (InvalidArgumentException $e) {
                 $fees = [];
@@ -91,14 +91,14 @@ class Data extends AbstractHelper
 
             if (is_array($fees)) {
                 foreach ($fees as $fee) {
-                    $this->methodFee[$fee['payment_method']] = [
-                        'fee'         => $fee['fee'],
+                    $this->methodDiscount[$fee['payment_method']] = [
+                        'discount'         => $fee['fee'],
                         'description' => $fee['description']
                     ];
                 }
             }
         }
-        return $this->methodFee;
+        return $this->methodDiscount;
     }
 
     /**
@@ -110,7 +110,7 @@ class Data extends AbstractHelper
     {
         if ($field) {
             $storeScope = ScopeInterface::SCOPE_STORE;
-            return $this->scopeConfig->getValue(self::CONFIG_PAYMENT_FEE . $field, $storeScope);
+            return $this->scopeConfig->getValue(self::CONFIG_PAYMENT_DISCOUNT . $field, $storeScope);
         }
         return null;
     }
@@ -133,7 +133,7 @@ class Data extends AbstractHelper
         /**@TODO check module or config**/
         if ($this->isEnabled()) {
             if ($method = $quote->getPayment()->getMethod()) {
-                if (isset($this->methodFee[$method])) {
+                if (isset($this->methodDiscount[$method])) {
                     return true;
                 }
             }
@@ -145,29 +145,41 @@ class Data extends AbstractHelper
      * @param Quote $quote
      * @return float|int
      */
-    public function getFee(Quote $quote)
+    public function getDiscount(Quote $quote)
     {
-        $method  = $quote->getPayment()->getMethod();
-        $fee     = $this->methodFee[$method]['fee'];
-        $feeType = $this->getFeeType();
-
-        if ($feeType != AbstractCarrier::HANDLING_TYPE_FIXED) {
-            $subTotal = $quote->getSubtotal();
-            $fee = $subTotal * ($fee / 100);
+        $method = $quote->getPayment()->getMethod();
+        $discount = 0;
+        if(!empty($this->methodDiscount[$method]['discount'])) {
+            $discount = $this->methodDiscount[$method]['discount'];
+            $discountType = $this->getDiscountType();
+            if ($discountType != AbstractCarrier::HANDLING_TYPE_FIXED) {
+                $subTotal = $quote->getSubtotal();
+                $discount = $subTotal *  ($discount / 100);
+            }
         }
+        return $discount;
+    }
 
-        // $fee = $this->pricingHelper->currency($fee, false, false);
-        $fee = $this->priceCurrency->round($fee);
-
-        return $fee;
+    /**
+     * @param Quote $quote
+     * @return float|int
+     */
+    public function getDiscountDescription(Quote $quote)
+    {
+        $description = null;
+        $method = $quote->getPayment()->getMethod();
+        if (!empty($this->methodDiscount[$method]['description'])) {
+            $description = $this->methodDiscount[$method]['description'];
+        }
+        return __('Payment Discount %1', $description);
     }
 
     /**
      * Retrieve Fee type from Store config (Percent or Fixed)
      * @return string
      */
-    public function getFeeType()
+    public function getDiscountType()
     {
-        return $this->getConfig('fee_type');
+        return $this->getConfig('discount_type');
     }
 }

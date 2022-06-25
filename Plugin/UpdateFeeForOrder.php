@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Boolfly\PaymentFee\Plugin;
+namespace Lg\PaymentDiscount\Plugin;
 
 use Magento\Checkout\Model\Session;
 use Magento\Framework\Registry;
@@ -63,14 +63,14 @@ class UpdateFeeForOrder
         $quote = $this->_checkoutSession->getQuote();
         $paymentMethod = $quote->getPayment()->getMethod();
 
-        $paypalMehodList = ['payflowpro','payflow_link','payflow_advanced','braintree_paypal','paypal_express_bml','payflow_express_bml','payflow_express','paypal_express'];
+        $paypalMehodList = [];
         if (!in_array($paymentMethod, $paypalMehodList)) {
             return;
         }
 
-        $feeAmount = $quote->getFeeAmount();
-        $cart->addCustomItem(__("Payment Fee"), 1, $feeAmount, 'payment_method_fee');
-        $cart->addSubtotal($feeAmount);
+        $discountAmount = $quote->getDiscountAmount();
+        $cart->addCustomItem(__("Payment Discount"), 1, $discountAmount, 'payment_method_discount');
+        $cart->addSubtotal($discountAmount);
     }
 
     /**
@@ -90,7 +90,7 @@ class UpdateFeeForOrder
 
         $found = false;
         foreach ($result as $key => $item) {
-            if ($item->getId() != 'payment_method_fee') {
+            if ($item->getId() != 'payment_method_discount') {
                 continue;
             }
 

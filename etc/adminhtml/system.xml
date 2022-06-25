@@ -3,26 +3,26 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <section id="paymentfee" translate="label" type="text" sortOrder="321" showInDefault="1" showInWebsite="1" showInStore="1">
-            <label>Payment Fee</label>
+        <section id="paymentdiscount" translate="label" type="text" sortOrder="321" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Payment Discount</label>
             <tab>sales</tab>
-            <resource>Boolfly_PaymentFee::config</resource>
+            <resource>Lg_PaymentDiscount::config</resource>
             <group id="config" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Payment Method Fee</label>
+                <label>Payment Method Discount</label>
                 <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Enable Payment Method Fee Functionality</label>
+                    <label>Enable Payment Method Discount Functionality</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="fee_type" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Calculate Handling Fee</label>
+                <field id="discount_type" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Calculate Handling Discount</label>
                     <source_model>Magento\Shipping\Model\Source\HandlingType</source_model>
                 </field>
                 <field id="default_description" translate="label" type="textarea" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Default Description</label>
                 </field>
-                <field id="fee" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Fee</label>
-                    <frontend_model>Boolfly\PaymentFee\Block\Adminhtml\System\Form\Field\PaymentFee</frontend_model>
+                <field id="discount" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Discount</label>
+                    <frontend_model>Lg\PaymentDiscount\Block\Adminhtml\System\Form\Field\PaymentDiscount</frontend_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
                 </field>
             </group>

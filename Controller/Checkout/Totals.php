@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Boolfly\PaymentFee\Controller\Checkout;
+namespace Lg\PaymentDiscount\Controller\Checkout;
 
 use Exception;
 use Magento\Checkout\Model\Session;

@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Boolfly\PaymentFee\Model\Quote\Address\Total;
+namespace Lg\PaymentDiscount\Model\Quote\Address\Total;
 
-use Boolfly\PaymentFee\Helper\Data;
+use Lg\PaymentDiscount\Helper\Data;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\Phrase;
 use Magento\Quote\Api\Data\PaymentInterface;
@@ -13,12 +13,12 @@ use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
 use Magento\Quote\Model\QuoteValidator;
 use Psr\Log\LoggerInterface;
 
-class Fee extends AbstractTotal
+class Discount extends AbstractTotal
 {
     /**
      * @var string
      */
-    protected $_code = 'fee';
+    protected $_code = 'discount';
     /**
      * @var Data
      */
@@ -82,27 +82,22 @@ class Fee extends AbstractTotal
             return $this;
         }
 
-        $fee = 0;
+        $discount = 0;
         if ($this->_helperData->canApply($quote)) {
-            $fee = $this->_helperData->getFee($quote);
+            $discount = $this->_helperData->getDiscount($quote);
         }
+        $total->setTotalAmount('discount_payment', $discount);
+        $total->setBaseTotalAmount('discount_payment', $discount);
 
-        $total->setFeeAmount($fee);
-        $total->setBaseFeeAmount($fee);
-
-        $total->setTotalAmount('fee_amount', $fee);
-        $total->setBaseTotalAmount('base_fee_amount', $fee);
-
-        // // Duplicate fee added when this is added
-        // $total->setGrandTotal($total->getGrandTotal() + $total->getFeeAmount());
-        // $total->setBaseGrandTotal($total->getBaseGrandTotal() + $total->getBaseFeeAmount());
-        $total->setGrandTotal($total->getGrandTotal());
-        $total->setBaseGrandTotal($total->getBaseGrandTotal());
+        $total->setGrandTotal($total->getGrandTotal() - $discount);
+        $total->setBaseGrandTotal($total->getBaseGrandTotal() - $discount);
 
         // Make sure that quote is also updated
-        $quote->setFeeAmount($fee);
-        $quote->setBaseFeeAmount($fee);
-
+        $quote->setDiscountPaymentAmount($discount);
+        $quote->setBaseDiscountPaymentAmount($discount);
+        $quote->setGrandTotal($total->getGrandTotal() - $discount);
+        $quote->setBaseGrandTotal($total->getBaseGrandTotal() - $discount);
+        
         return $this;
     }
 
@@ -119,20 +114,20 @@ class Fee extends AbstractTotal
         Total $total
     ) {
         $result = [
-            'code' => $this->getCode(),
-            'title' => __('Payment Fee'),
-            'value' => $total->getFeeAmount()
+            'code'  => $this->getCode(),
+            'title' => $this->_helperData->getDiscountDescription($quote),
+            'value' => -$quote->getDiscountPaymentAmount()
         ];
         return $result;
     }
 
-    /**
+    /** 
      * Get Subtotal label
      *
      * @return Phrase
      */
     public function getLabel()
     {
-        return __('Payment Fee');
+        return __('Payment Discount');
     }
 }

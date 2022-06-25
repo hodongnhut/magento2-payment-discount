@@ -1,10 +1,10 @@
 {
-    "name": "boolfly/payment-fee",
+    "name": "lg/payment-discount",
     "description": "N/A",
     "authors": [
       {
-        "name": "Khoa",
-        "email": "mrkhoa99@gmail.com"
+        "name": "Leo",
+        "email": "hodongnhut@gmail.com"
       }
     ],
     "require": {
@@ -17,7 +17,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Boolfly\\PaymentFee\\": ""
+            "Lg\\PaymentDiscount\\": ""
         }
     }
 }

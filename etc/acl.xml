@@ -8,7 +8,7 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Boolfly_PaymentFee::config" title="Boolfly Payment Fee"/>
+                            <resource id="Lg_PaymentDiscount::config" title="Lg Payment Discount"/>
                         </resource>
                     </resource>
                 </resource>

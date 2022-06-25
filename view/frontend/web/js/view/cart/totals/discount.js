@@ -2,13 +2,13 @@
 /*global define*/
 define(
     [
-        'Boolfly_PaymentFee/js/view/cart/summary/fee'
+        'Lg_PaymentDiscount/js/view/cart/summary/discount'
     ],
     function (Component) {
         "use strict";
         return Component.extend({
             defaults: {
-                template: 'Boolfly_PaymentFee/cart/totals/fee'
+                template: 'Lg_PaymentDiscount/cart/totals/discount'
             },
             /**
              * @override
@@ -17,6 +17,10 @@ define(
              */
             isDisplayed: function () {
                 return this.getPureValue() != 0;
+            },
+            getTitle: function() {
+                var title = 'Payment Discount dasdasd';
+                return title;
             }
         });
     }
