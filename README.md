@@ -23,9 +23,10 @@ https://magento.stackexchange.com/questions/128580/magento-2-discount-depend-on-
 
 **Admin Config:**
 Admin -> Store Config ->Sales -> Payment Discount
-![image](https://user-images.githubusercontent.com/8769219/175768768-f3418965-0cf7-4691-96a3-7d2feeb2d30c.png)
+![image](https://user-images.githubusercontent.com/8769219/176577256-1c58109c-3fe2-42d8-aa60-746ada0c6554.png)
+
 Storefont:
 ![image](https://user-images.githubusercontent.com/8769219/175768891-2cb93efa-0092-46df-b791-e3373a4fda47.png)
 
 **Contact**
-If have any Question please contact me on Skype: hodongnhut
+If have any Question please contact me on Skype: **hodongnhut**, Website: https://fitgroupco.com/
