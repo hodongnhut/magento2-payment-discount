@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment_discount>
+            <config_discount>
+                <enabled>1</enabled>
+                <default_description>The module Configuration Discount for specific Payment</default_description>
+                <discount>
+                    <item1>
+                        <payment_method>HyperPay_Hsbc</payment_method>
+                        <discount>10</discount>
+                        <calculate>P</calculate>
+                        <label>Payment Discount 10%</label>
+                    </item1>
+                </discount>
+            </config_discount>
+        </payment_discount>
+    </default>
+</config>

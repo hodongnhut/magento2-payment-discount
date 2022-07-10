@@ -18,7 +18,7 @@
                                                     <item name="children" xsi:type="array">
                                                         <item name="discountamount" xsi:type="array">
                                                             <item name="component"  xsi:type="string">Lg_PaymentDiscount/js/view/checkout/cart/totals/discount</item>
-                                                            <item name="sortOrder" xsi:type="string">35</item>
+                                                            <item name="sortOrder" xsi:type="string">30</item>
                                                             <item name="config" xsi:type="array">
                                                                 <item name="template" xsi:type="string">Lg_PaymentDiscount/checkout/cart/totals/discount</item>
                                                                 <item name="title" xsi:type="string" translate="true">Payment Discount</item>

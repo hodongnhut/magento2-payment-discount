@@ -33,15 +33,15 @@ class Totals extends Template
         $this->getCreditmemo();
         $this->getSource();
 
-        if(!$this->getSource()->getFeeAmount()) {
+        if(!$this->getSource()->getDiscountPaymentAmount()) {
             return $this;
         }
         $fee = new DataObject(
             [
-                'code' => 'fee',
+                'code' => 'payment_discount',
                 'strong' => false,
-                'value' => $this->getSource()->getFeeAmount(),
-                'label' => __('Fee Amount'),
+                'value' => $this->getSource()->getDiscountPaymentAmount(),
+                'label' => __('Payment Discount'),
             ]
         );
 

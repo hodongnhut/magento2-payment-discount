@@ -6,7 +6,7 @@ use Magento\Framework\View\Element\Context;
 use Magento\Framework\View\Element\Html\Select;
 use Magento\Payment\Model\Config;
 
-class Methods extends Select
+class Calculate extends Select
 {
     /**
      * Payment methods cache
@@ -32,15 +32,16 @@ class Methods extends Select
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->paymentConfig = $config;
-    }
-
-    protected function _getPaymentMethods()
-    {
-        if ($this->methods === null) {
-            $this->methods = $this->paymentConfig->getActiveMethods();
-        }
-        return $this->methods;
+        $this->paymentConfigCalculate = [
+            [
+                'code' => 'F',
+                'value'=> 'Fixed'
+            ],
+            [
+                'code' => 'P',
+                'value'=> 'Percent'
+            ]
+        ];
     }
 
     /**
@@ -60,9 +61,8 @@ class Methods extends Select
     public function _toHtml()
     {
         if (!$this->getOptions()) {
-            foreach ($this->_getPaymentMethods() as $paymentCode => $paymentModel) {
-                $paymentTitle = $this->_scopeConfig->getValue('payment/' . $paymentCode . '/title');
-                $this->addOption($paymentCode, addslashes($paymentTitle));
+            foreach ($this->paymentConfigCalculate as $paymentModel) {
+                $this->addOption($paymentModel['code'], addslashes($paymentModel['value']));
             }
         }
         return parent::_toHtml();

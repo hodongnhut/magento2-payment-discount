@@ -17,6 +17,8 @@ class PaymentDiscount extends AbstractFieldArray
      */
     protected $_typeRenderer;
 
+    protected $_typeRendererCal;
+
     protected $_searchFieldRenderer;
 
     /**
@@ -47,11 +49,20 @@ class PaymentDiscount extends AbstractFieldArray
             'payment_method',
             ['label' => __('Payment Method'), 'renderer' => $this->_getPaymentRenderer()]
         );
-
-        $this->addColumn('fee', ['label' => __('Discount')]);
-        $this->addColumn('description', ['label' => __('Description')]);
+        $this->addColumn(
+            'discount', 
+            ['label' => __('Discount')]
+        );
+        $this->addColumn(
+            'calculate',
+            ['label' => __('Calculate'), 'renderer' => $this->_getCalculateRenderer()]
+        );
+        $this->addColumn(
+            'label', 
+            ['label' => __('Label')]
+        );
         $this->_addAfter       = false;
-        $this->_addButtonLabel = __('Add Discount');
+        $this->_addButtonLabel = __('Add');
     }
 
     /**
@@ -68,9 +79,28 @@ class PaymentDiscount extends AbstractFieldArray
                 '',
                 ['data' => ['is_render_to_js_template' => true]]
             );
-            $this->_typeRenderer->setClass('payemtfee_select');
+            $this->_typeRenderer->setClass('payment_fee_select');
         }
         return $this->_typeRenderer;
+    }
+
+     /**
+     * Retrieve active payment methods renderer
+     *
+     * @return Methods
+     * @throws LocalizedException
+     */
+    protected function _getCalculateRenderer()
+    {
+        if (!$this->_typeRendererCal) {
+            $this->_typeRendererCal = $this->getLayout()->createBlock(
+                'Lg\PaymentDiscount\Block\Adminhtml\System\Form\Field\Calculate',
+                '',
+                ['data' => ['is_render_to_js_template' => true]]
+            );
+            $this->_typeRendererCal->setClass('payment_calculate_select');
+        }
+        return $this->_typeRendererCal;
     }
 
     /**
@@ -84,6 +114,8 @@ class PaymentDiscount extends AbstractFieldArray
     {
         $optionExtraAttr = [];
         $optionExtraAttr['option_' . $this->_getPaymentRenderer()->calcOptionHash($row->getData('payment_method'))] =
+            'selected="selected"';
+        $optionExtraAttr['option_' . $this->_getCalculateRenderer()->calcOptionHash($row->getData('calculate'))] =
             'selected="selected"';
         $row->setData(
             'option_extra_attrs',

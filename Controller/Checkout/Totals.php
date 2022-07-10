@@ -68,13 +68,9 @@ class Totals extends Action
         ];
         try {
             $this->quoteRepository->get($this->_checkoutSession->getQuoteId());
-            $quote = $this->_checkoutSession->getQuote();
-
-            //Trigger to re-calculate totals
             $payment = $this->_helper->jsonDecode($this->getRequest()->getContent());
             $this->_checkoutSession->getQuote()->getPayment()->setMethod($payment['payment']);
-            $quote->collectTotals();
-            $this->quoteRepository->save($quote);
+            $this->quoteRepository->save($this->_checkoutSession->getQuote()->collectTotals());
         } catch (Exception $e) {
             $response = [
                 'errors' => true,

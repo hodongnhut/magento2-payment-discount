@@ -8,7 +8,7 @@ use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 use Psr\Log\LoggerInterface;
 
-class AddFeeToOrderObserver implements ObserverInterface
+class AddDiscountToOrderObserver implements ObserverInterface
 {
     /**
      * @var Session
@@ -45,11 +45,12 @@ class AddFeeToOrderObserver implements ObserverInterface
     public function execute(EventObserver $observer)
     {
         $quote = $observer->getQuote();
-        if ($this->_helper->canApply($quote)) {
-            $discount = $this->_helper->getDiscount($quote);
+        $paymentMethod = $quote->getPayment()->getMethod();
+        if ($this->_helper->canApply($quote, $paymentMethod)) {
+            $discount = $this->_helper->getDiscount($quote, $paymentMethod);
             $order = $observer->getOrder();
-            $order->setData('discount_payment_amount', $discount);
-            $order->setData('base_discount_payment_amount', $discount);
+            $order->setData('discount_payment_amount', $discount['discountTotal']);
+            $order->setData('base_discount_payment_amount', $discount['discountTotal']);
         }
         return $this;
     }

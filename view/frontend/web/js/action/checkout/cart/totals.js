@@ -5,32 +5,20 @@ define(
         'mage/storage',
         'mage/url',
         'Magento_Checkout/js/action/get-totals',
+        'Magento_Checkout/js/model/full-screen-loader',
+        'Magento_Checkout/js/model/totals'
     ],
     function(
         $,
         ko,
         storage,
         urlBuilder,
-        getTotalsAction
+        getTotalsAction,
+        fullScreenLoader,
+        totals
     ) {
         'use strict';
         return function (isLoading, payment) {
-            var serviceUrl = urlBuilder.build('PaymentDiscount/checkout/totals');
-            return storage.post(
-                serviceUrl,
-                JSON.stringify({payment: payment})
-            ).done(
-                function(response) {
-                    if (response) {
-                        isLoading(false);
-                        getTotalsAction([]);
-                    }
-                }
-            ).fail(
-                function (response) {
-                    isLoading(false);
-                }
-            );
         }
     }
 );

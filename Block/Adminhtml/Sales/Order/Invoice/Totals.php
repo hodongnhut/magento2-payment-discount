@@ -36,14 +36,14 @@ class Totals extends Template
         $this->getInvoice();
         $this->getSource();
 
-        if(!$this->getSource()->getFeeAmount()) {
+        if(!$this->getSource()->getDiscountPaymentAmount()) {
             return $this;
         }
         $total = new DataObject(
             [
-                'code' => 'fee',
-                'value' => $this->getSource()->getFeeAmount(),
-                'label' => __('Fee Amount'),
+                'code' => 'payment_discount',
+                'value' => - $this->getSource()->getDiscountPaymentAmount(),
+                'label' => __('Payment Discount'),
             ]
         );
 

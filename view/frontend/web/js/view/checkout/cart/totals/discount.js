@@ -15,7 +15,6 @@ define(
             isDisplayed: function() {
                 return this.getPureValue() != 0;
             },
-
             getValue: function() {
                 var price = 0;
                 if (this.totals()) {

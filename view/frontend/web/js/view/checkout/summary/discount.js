@@ -13,6 +13,11 @@ define(
                 isFullTaxSummaryDisplayed: window.checkoutConfig.isFullTaxSummaryDisplayed || false,
                 template: 'Lg_PaymentDiscount/checkout/summary/discount'
             },
+            isLoading: ko.observable(false),
+            initObservable: function () {
+                this._super();
+                this.isLoading(true);
+            },
             totals: quote.getTotals(),
             isTaxDisplayedInGrandTotal: window.checkoutConfig.includeTaxInGrandTotal || false,
             isDisplayed: function() {

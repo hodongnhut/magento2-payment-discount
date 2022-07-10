@@ -59,20 +59,21 @@ class Totals extends Template
         $parent = $this->getParentBlock();
         $this->_order = $parent->getOrder();
         $this->_source = $parent->getSource();
-        if (!$this->_source->getFeeAmount()) {
+
+        if (!$this->_source->getDiscountPaymentAmount()) {
             return $this;
         }
 
-        $fee = new DataObject(
+        $discount = new DataObject(
             [
-                'code' => 'fee',
+                'code' => 'payment_discount',
                 'strong' => false,
-                'value' => $this->_source->getFeeAmount(),
-                'label' => __('Payment Fee'),
+                'value' => $this->_source->getDiscountPaymentAmount(),
+                'label' => __('Payment Discount'),
             ]
         );
 
-        $parent->addTotal($fee, 'fee');
+        $parent->addTotal($discount, 'payment_discount');
 
         return $this;
     }

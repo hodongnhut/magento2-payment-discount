@@ -6,14 +6,14 @@
             <item name="discount_payment_amount" instance="Lg\PaymentDiscount\Model\Quote\Address\Total\Discount" sort_order="150"/>
         </group>
     </section>
-    <!-- <section name="order_invoice">
+    <section name="order_invoice">
         <group name="totals">
-            <item name="discount_amount" instance="Lg\PaymentDiscount\Model\Order\Total\Invoice\Fee" sort_order="160"/>
+            <item name="discount_amount" instance="Lg\PaymentDiscount\Model\Order\Total\Invoice\Discount" sort_order="160"/>
         </group>
     </section>
     <section name="order_creditmemo">
         <group name="totals">
-            <item name="discount_amount" instance="Lg\PaymentDiscount\Model\Order\Total\Creditmemo\Fee" sort_order="160"/>
+            <item name="discount_amount" instance="Lg\PaymentDiscount\Model\Order\Total\Creditmemo\Discount" sort_order="160"/>
         </group>
-    </section> -->
+    </section>
 </config>

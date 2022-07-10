@@ -21,8 +21,12 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
         // Add discount and baseDiscount
         foreach (['quote', 'quote_address', 'sales_order', 'sales_invoice', 'sales_creditmemo'] as $table) {
-            $this->addColumn($setup, $table, 'discount_payment_amount', 'Discount Amount');
-            $this->addColumn($setup, $table, 'base_discount_payment_amount', 'Base Discount Amount');
+            $this->addColumn($setup, $table, 'discount_payment_amount', 'Discount Payment Amount');
+            $this->addColumn($setup, $table, 'base_discount_payment_amount', 'Base Discount Payment Amount');
+            if ($table === 'quote') {
+                $this->addColumnString($setup, $table, 'discount_payment_type', 'Discount Payment Type');
+                $this->addColumn($setup, $table, 'discount_payment_value', 'Discount Payment Value');
+            }
         }
 
         // Add feeInvoiced, baseFeeInvoiced, feeRefunded, baseFeeRefunded
@@ -49,6 +53,27 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
                 'length' => '12,4',
                 'default' => 0.0000,
+                'nullable' => true,
+                'comment' => $description
+            ]
+        );
+    }
+
+    /**
+     * @param \Magento\Framework\Setup\SchemaSetupInterface $setup
+     * @param string $table
+     * @param string $name
+     * @param string $description
+     */
+    public function addColumnString(SchemaSetupInterface $setup, $table, $name, $description)
+    {
+        $setup->getConnection()->addColumn(
+            $setup->getTable($table),
+            $name,
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                'length' => '255',
+                'default' => null,
                 'nullable' => true,
                 'comment' => $description
             ]

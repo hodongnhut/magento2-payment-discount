@@ -2,9 +2,10 @@
 /*global define*/
 define(
     [
-        'Lg_PaymentDiscount/js/view/cart/summary/discount'
+        'Lg_PaymentDiscount/js/view/cart/summary/discount',
+        'Magento_Checkout/js/model/totals'
     ],
-    function (Component) {
+    function (Component, totals) {
         "use strict";
         return Component.extend({
             defaults: {
@@ -19,7 +20,10 @@ define(
                 return this.getPureValue() != 0;
             },
             getTitle: function() {
-                var title = 'Payment Discount dasdasd';
+                var title = '';
+                if (this.totals()) {
+                    title = totals.getSegment('discount_payment_amount').title;
+                }
                 return title;
             }
         });

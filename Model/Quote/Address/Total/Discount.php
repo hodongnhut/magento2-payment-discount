@@ -12,6 +12,7 @@ use Magento\Quote\Model\Quote\Address\Total;
 use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
 use Magento\Quote\Model\QuoteValidator;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\App\RequestInterface;
 
 class Discount extends AbstractTotal
 {
@@ -41,6 +42,8 @@ class Discount extends AbstractTotal
      * @return $this
      */
     protected $_quoteValidator = null;
+    protected $request;
+    protected $payment;
 
     /**
      * Payment Fee constructor.
@@ -55,12 +58,15 @@ class Discount extends AbstractTotal
         Session $checkoutSession,
         PaymentInterface $payment,
         Data $helperData,
-        LoggerInterface $loggerInterface
+        LoggerInterface $loggerInterface,
+        RequestInterface $request
     ) {
         $this->_quoteValidator = $quoteValidator;
         $this->_helperData = $helperData;
         $this->_checkoutSession = $checkoutSession;
         $this->logger = $loggerInterface;
+        $this->request = $request;
+        $this->payment = $payment;
     }
 
     /**
@@ -76,28 +82,43 @@ class Discount extends AbstractTotal
         ShippingAssignmentInterface $shippingAssignment,
         Total $total
     ) {
-        parent::collect($quote, $shippingAssignment, $total);
+        if (!$this->_helperData->isEnabled()) {
+            return parent::collect($quote, $shippingAssignment, $total);
+        }
 
         if (!count($shippingAssignment->getItems())) {
             return $this;
         }
-
-        $discount = 0;
-        if ($this->_helperData->canApply($quote)) {
-            $discount = $this->_helperData->getDiscount($quote);
+        $discount = $this->_helperData->getDiscountPaymentDefault();
+        $address = $shippingAssignment->getShipping()->getAddress();
+        if($this->request->getContent()) {
+            $paymentMethod = $this->_helperData->arraySearchKey('payment_method', json_decode($this->request->getContent(), true));
+            if ($paymentMethod) {
+                if ($this->_helperData->canApply($quote, $paymentMethod)) {
+                    $discount = $this->_helperData->getDiscount($quote, $paymentMethod);
+                }
+                $quote->getPayment()->setMethod($paymentMethod);
+            }
+            $shippingPage = $this->_helperData->checkRequestShipping($this->request->getPathInfo());
+            if ($shippingPage) {
+                $paymentMethod = $quote->getPayment()->getMethod();
+                if ($this->_helperData->canApply($quote, $paymentMethod)) {
+                    $discount = $this->_helperData->getDiscount($quote, $paymentMethod);
+                }
+            }
         }
-        $total->setTotalAmount('discount_payment', $discount);
-        $total->setBaseTotalAmount('discount_payment', $discount);
+        $total->setDiscountPaymentAmount($discount['discountTotal']);
+        $total->setBaseDiscountPaymentAmount($discount['discountTotal']);
 
-        $total->setGrandTotal($total->getGrandTotal() - $discount);
-        $total->setBaseGrandTotal($total->getBaseGrandTotal() - $discount);
-
-        // Make sure that quote is also updated
-        $quote->setDiscountPaymentAmount($discount);
-        $quote->setBaseDiscountPaymentAmount($discount);
-        $quote->setGrandTotal($total->getGrandTotal() - $discount);
-        $quote->setBaseGrandTotal($total->getBaseGrandTotal() - $discount);
+        $quote->setDiscountPaymentAmount($discount['discountTotal']);
+        $quote->setBaseDiscountPaymentAmount($discount['discountTotal']);
         
+        $quote->setDiscountPaymentType($discount['discountType']);
+        $quote->setDiscountPaymentValue($discount['discountValue']);
+
+        $address->setDiscountPaymentAmount($discount['discountTotal']);
+        $address->setBaseDiscountPaymentAmount($discount['discountTotal']);
+       
         return $this;
     }
 
@@ -115,8 +136,8 @@ class Discount extends AbstractTotal
     ) {
         $result = [
             'code'  => $this->getCode(),
-            'title' => $this->_helperData->getDiscountDescription($quote),
-            'value' => -$quote->getDiscountPaymentAmount()
+            'title' => $this->_helperData->getDiscountLabel($quote),
+            'value' => - $quote->getDiscountPaymentAmount()
         ];
         return $result;
     }
